@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage'
 import { MainPage } from './pages/MainPage'
 import { MyPage } from './pages/MyPage'
-import { LoginLoadingPage } from './pages/LoginPage/LoginLoadingPage';
+import { LoginLoadingPage } from './pages/LoginLandingPage/loadingPage';
 
 const Layout = () => {
   return (
