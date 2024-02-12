@@ -4,7 +4,7 @@ import { LoginPage } from './pages/LoginPage'
 import { MainPage } from './pages/MainPage'
 import { MyPage } from './pages/MyPage'
 import { LoginLoadingPage } from './pages/LoginLandingPage/loadingPage';
-
+import ChatPage from './pages/ChatPage/Chat';
 const Layout = () => {
   return (
     <div>
@@ -26,6 +26,7 @@ function App() {
             <Route path='/main' element={<MainPage />} />
             <Route path='/login/kakao' element={<LoginLoadingPage/>} />
             <Route path='/mypage' element={<MyPage/>} />
+            <Route path='/chat' element={<ChatPage />} />
           </Route>
         </Routes>
       </Router>
