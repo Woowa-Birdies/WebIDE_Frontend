@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import { getAccessToken, getMemberWithAccessToken } from '../../api/kakaoApi'
 import { useSearchParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { login } from '../../redux/reducers/loginSlice'
+import { useCustomLogin } from '../../hooks/useCustomLogin'
 
 export const LoginLoadingPage = () => {
 
   const [searchParams] = useSearchParams()
 
-    const authCode = searchParams.get('code')
+  const {isLogin, moveToPath, moveToLoginReturn} = useCustomLogin()
 
-    const [userInfo, setUserInfo] = useState()
+  const authCode = searchParams.get('code')
 
-    useEffect(() => {
-      getAccessToken(authCode).then(accessToken => {
+  const dispatch = useDispatch()
 
-        getMemberWithAccessToken(accessToken).then(result => {
-          console.log("-------------------------")
-          console.log(result)
-        })
 
+  useEffect(() => {
+    getAccessToken(authCode).then(accessToken => {
+
+      getMemberWithAccessToken(accessToken).then(memberInfo => {
+        console.log("-------------------------")
+        console.log(memberInfo)
+
+        dispatch(login(memberInfo))
+
+        if (memberInfo) {
+          moveToPath("/mypage")
+        }
       })
+
+    })
       
-    }, [authCode])
+  }, [authCode])
 
   return (
     <div>

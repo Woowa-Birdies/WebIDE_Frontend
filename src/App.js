@@ -4,27 +4,21 @@ import { LoginPage } from './pages/LoginPage'
 import { MainPage } from './pages/MainPage'
 import { MyPage } from './pages/MyPage'
 import { LoginLoadingPage } from './pages/LoginLandingPage/loadingPage';
+import SideMenu from './components/menus/SideMenu';
 import ChatPage from './pages/ChatPage/Chat';
-const Layout = () => {
-  return (
-    <div>
-      {/* <Nav/> */}
-
-      <Outlet />
-
-    </div>
-  )
-}
 
 function App() {
+
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path='/' element={<Layout />} >
-            <Route index element={<LoginPage />} />
-            <Route path='/main' element={<MainPage />} />
+          <Route path='/' >
+            <Route path='/login' element={<LoginPage />} />
             <Route path='/login/kakao' element={<LoginLoadingPage/>} />
+          </Route>
+          <Route path='/' element={<SideMenu />} >
+            <Route index element={<MainPage />} />
             <Route path='/mypage' element={<MyPage/>} />
             <Route path='/chat' element={<ChatPage />} />
           </Route>

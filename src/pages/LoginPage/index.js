@@ -18,6 +18,7 @@ const Card = styled.div`
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
               0 1px 2px 0 rgba(0, 0, 0, 0.06);
   width: 24rem;
+  // border: 1px solid red;
 `;
 
 const Title = styled.h1`
@@ -65,15 +66,7 @@ const FooterLink = styled.a`
 
 const link = getKakaoLoginLink()
 
-const UserList = ['U', 'Lucy', 'Tom', 'Edward'];
-const ColorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
-const GapList = [4, 3, 2, 1];
-
 export const LoginPage = () => {
-
-  const [user, setUser] = useState(UserList[0]);
-  const [color, setColor] = useState(ColorList[0]);
-  const [gap, setGap] = useState(GapList[0]);
 
 
   useEffect(() => {  
@@ -85,9 +78,7 @@ export const LoginPage = () => {
 
   return (
     <>
-    {/* <Avatar style={{ backgroundColor: 'orange', verticalAlign: 'middle' }} size="large" gap={gap}>
-        {user}
-      </Avatar> */}
+    
     <Container>
       <Card>
         <Title>Login</Title>
