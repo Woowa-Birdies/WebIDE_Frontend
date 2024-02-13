@@ -5,6 +5,7 @@ import { MainPage } from './pages/MainPage'
 import { MyPage } from './pages/MyPage'
 import { LoginLoadingPage } from './pages/LoginLandingPage/loadingPage';
 import SideMenu from './components/menus/SideMenu';
+import ChatPage from './pages/ChatPage/Chat';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path='/' element={<SideMenu />} >
             <Route index element={<MainPage />} />
             <Route path='/mypage' element={<MyPage/>} />
+            <Route path='/chat' element={<ChatPage />} />
           </Route>
         </Routes>
       </Router>
