@@ -1,8 +1,10 @@
-import { Button, Flex, Image, Input } from 'antd'
+import { Avatar, Button, Flex, Image, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
-import { modifyMember } from '../../api/memberApi';
+import { deleteMember, modifyMember } from '../../api/memberApi';
+import { login } from '../../redux/reducers/loginSlice';
+import { useCustomLogin } from '../../hooks/useCustomLogin';
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +35,11 @@ export const ModifyComponent = () => {
 
     const [loadings, setLoadings] = useState([]);
 
+    const {doLogout} = useCustomLogin()
+
     const loginInfo = useSelector(state => state.loginSlice)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setMember({...loginInfo})
@@ -60,22 +66,27 @@ export const ModifyComponent = () => {
 
         setMember({...member})
         console.log(member.accessToken)
-        console.log(loginInfo.pwd)
+        console.log(member)
     }
 
     const handleClickModify = () => {
-      modifyMember(member)
+      const result = modifyMember(member)
+    }
+
+    const handleClickDelete = () => {
+      deleteMember(member)
     }
 
     return (
         <Container>
             <Card>
               <Flex gap="small" align="center" wrap="wrap" vertical="true">
-              <Image
+              {/* <Image
                   style={{ borderRadius:'50%' }}
                   width={100}
                   src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
+              /> */}
+              <Avatar size={64} >{member.nickname[0]}</Avatar>
               <p></p>
               <InputWrapper>
                 이메일
@@ -83,7 +94,7 @@ export const ModifyComponent = () => {
               </InputWrapper>
               <InputWrapper>
                 닉네임
-                <Input name='nickname' value={member.nickname} variant='filled' disabled onChange={handleChange} />
+                <Input name='nickname' value={member.nickname} variant='filled' onChange={handleChange} />
               </InputWrapper>
               <Button 
                 type="primary" 
@@ -95,7 +106,10 @@ export const ModifyComponent = () => {
               >
                   수정하기
               </Button>
-              <Button danger type="text">
+              <Button danger 
+                type="text"
+                onClick={() => {handleClickDelete()}}
+              >
                   탈퇴하기
               </Button>
               </Flex>

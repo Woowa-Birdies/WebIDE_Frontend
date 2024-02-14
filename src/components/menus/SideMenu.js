@@ -69,6 +69,8 @@ const SideMenu = () => {
     }
   }, [loginInfo, pathname])
 
+  console.log(loginInfo.accessToken)
+
   return (
     <Layout
       style={{

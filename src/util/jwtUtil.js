@@ -4,13 +4,16 @@ import { getCookie, setCookie } from "./cookieUtil"
 const jwtAxios = axios.create()
 
 const refreshJWT = async (accessToken, refreshToken) => {
+
+
     const host = process.env.REACT_APP_API_SERVER_HOST
 
     const header = {headers: {'Authorization': `Bearer ${accessToken}`}}
 
-    const res = await axios.get(`${host}/api/member/refresh?refreshToken=${refreshToken}`, header)
+    const res = await axios.get(
+        `${host}/api/member/refresh?refreshToken=${refreshToken}`, 
+        header)
 
-    console.log(res.data)
 
     return res.data
 }
@@ -18,9 +21,7 @@ const refreshJWT = async (accessToken, refreshToken) => {
 //before request
 const beforeReq = (config) => { 
     console.log("before request.............")
-    console.log(config)
-    console.log(config.data.accessToken)
-    const memberInfo = getCookie('member')
+    const memberInfo = localStorage.getItem('member') ? JSON.parse(localStorage.getItem('member')) : []
     console.log('member jwtutil', memberInfo)
     
     if(!memberInfo) {
@@ -34,16 +35,10 @@ const beforeReq = (config) => {
             )
         }
         
-        console.log(config.data.accessToken)
     const {accessToken} = memberInfo
 
-    console.log("accessToken", accessToken)
-    console.log("accessToken", config.data.accessToken)
-
     // Authorization 헤더 처리 
-  config.headers.Authorization = `Bearer ${config.data.accessToken}`
-
-  console.log('config.header', config.headers)
+  config.headers.Authorization = `Bearer ${accessToken}`
 
   return config
 }
@@ -52,6 +47,8 @@ const requestFail = (err) => {
   console.log("request error............")
     return Promise.reject(err) 
 }
+
+// 문제의 구간--------------------------------------------------------------------------------------
 //before return response
 const beforeRes = async (res) => {
     console.log("before return response...........")
@@ -60,16 +57,19 @@ const beforeRes = async (res) => {
 
     if(data && data.error === 'ERROR_ACCESS_TOKEN') {
         const memberCookieValue = getCookie('member')
-
-        const result = await refreshJWT(memberCookieValue.accessToken, memberCookieValue.refreshToken)
+        const memberValue = localStorage.getItem('member') ? JSON.parse(localStorage.getItem('member')) : []
+        console.log('3', memberValue.accessToken)
+        const result = await refreshJWT(memberValue.accessToken, memberValue.refreshToken)
 
         // 새로운 accessToken, refreshToken
         memberCookieValue.accessToken = result.accessToken
         memberCookieValue.refreshToken = result.refreshToken
 
         setCookie('member', JSON.stringify(memberCookieValue), 1)
+        localStorage.setItem('member', JSON.stringify({...memberValue, 'accessToken':result.accessToken, 'refreshToken':result.refreshToken}))
 
         const originalRequest = res.config
+
         originalRequest.headers.Authorization = `Bearer ${memberCookieValue.accessToken}`
 
         return await axios(originalRequest)
@@ -85,5 +85,7 @@ const responseFail = (err) => {
 }
 
 jwtAxios.interceptors.request.use( beforeReq, requestFail ) 
+
 jwtAxios.interceptors.response.use( beforeRes, responseFail)
+
 export default jwtAxios
