@@ -12,6 +12,7 @@ import { LoginLoadingPage } from "./pages/LoginLandingPage/loadingPage";
 
 import SideMenu from './components/menus/SideMenu';
 import ChatPage from './pages/ChatPage/Chat';
+import { LoginLoadingPage2 } from './pages/LoginLandingPage/loadingPage2';
 
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
@@ -32,12 +33,11 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route index element={<MainPage />} />
-            <Route path='login' element={<LoginPage />} />
-            <Route path='login/kakao' element={<LoginLoadingPage/>} />
-            <Route path="mypage" element={<MyPage />} />
-
+          <Route path='/' >
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/login/kakao' element={<LoginLoadingPage/>} />
+            <Route path='/login/google' element={<LoginLoadingPage2/>} />
+              
             <Route path="ide" element={<IDEPage />} />
           </Route>
           <Route path='/' element={<SideMenu />} >

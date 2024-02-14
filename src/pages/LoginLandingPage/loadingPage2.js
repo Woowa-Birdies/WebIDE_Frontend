@@ -4,35 +4,36 @@ import { useSearchParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/reducers/loginSlice'
 import { useCustomLogin } from '../../hooks/useCustomLogin'
+import { getGoogleAccessToken, getGoogleMemberWithAccesssToken } from '../../api/googleApi'
 
-export const LoginLoadingPage = () => {
+export const LoginLoadingPage2 = () => {
 
   const [searchParams] = useSearchParams()
 
   const {isLogin, moveToPath, moveToLoginReturn} = useCustomLogin()
 
-  const authCode = searchParams.get('code')
+  const code = searchParams.get('code')
 
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-    getAccessToken(authCode).then(accessToken => {
+    getGoogleAccessToken(code).then(resp => {
+        console.log('resp', resp)
 
-      getMemberWithAccessToken(accessToken).then(memberInfo => {
-        console.log("-------------------------")
-        console.log(memberInfo)
+        getGoogleMemberWithAccesssToken(resp).then(memberInfo => {
+            console.log('---------')
+            console.log(memberInfo)
 
-        dispatch(login(memberInfo))
+            dispatch(login(memberInfo))
 
-        if (memberInfo) {
-          moveToPath("/")
-        }
-      })
-
+            if (memberInfo) {
+                moveToPath("/")
+            }
+        })
     })
       
-  }, [authCode])
+  }, [code])
 
   return (
     <div>
