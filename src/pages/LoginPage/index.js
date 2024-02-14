@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getKakaoLoginLink } from '../../api/kakaoApi';
 import { Avatar } from 'antd';
+import { getGoogleLoginLink } from '../../api/googleApi';
 
 const Container = styled.div`
   display: flex;
@@ -64,7 +65,8 @@ const FooterLink = styled.a`
   }
 `;
 
-const link = getKakaoLoginLink()
+const kakaoOauthLink = getKakaoLoginLink()
+const googleOauthLink = getGoogleLoginLink()
 
 export const LoginPage = () => {
 
@@ -84,7 +86,7 @@ export const LoginPage = () => {
         <Title>Login</Title>
         <div>
           <StyledButton
-            href="#"
+            href={googleOauthLink}
             bgColor="#1a73e8"
             hoverBgColor="#2c66a3"
           >
@@ -100,7 +102,7 @@ export const LoginPage = () => {
             Login with Github
           </StyledButton>
           <StyledButton
-            href={link}
+            href={kakaoOauthLink}
             bgColor="#fee500"
             hoverBgColor="#e6c300"
           >

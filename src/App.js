@@ -6,6 +6,7 @@ import { MyPage } from './pages/MyPage'
 import { LoginLoadingPage } from './pages/LoginLandingPage/loadingPage';
 import SideMenu from './components/menus/SideMenu';
 import ChatPage from './pages/ChatPage/Chat';
+import { LoginLoadingPage2 } from './pages/LoginLandingPage/loadingPage2';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='/' >
             <Route path='/login' element={<LoginPage />} />
             <Route path='/login/kakao' element={<LoginLoadingPage/>} />
+            <Route path='/login/google' element={<LoginLoadingPage2/>} />
           </Route>
           <Route path='/' element={<SideMenu />} >
             <Route index element={<MainPage />} />
