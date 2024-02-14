@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate, useNavigate } from "react-router-dom"
+import { logout } from "../redux/reducers/loginSlice"
 
 export const useCustomLogin = () => {
     const navigate = useNavigate()
@@ -14,9 +15,10 @@ export const useCustomLogin = () => {
     //     return action.payload
     // }
 
-    // const doLogout = () => { //---------------로그아웃 함수 
-    //     dispatch(logout())
-    // }
+    const doLogout = () => { //---------------로그아웃 함수 
+        dispatch(logout())
+        moveToLogin()
+    }
 
     const moveToPath = (path) => { //----------------페이지 이동
         navigate({pathname: path}, {replace:true})
@@ -34,7 +36,7 @@ export const useCustomLogin = () => {
         loginState, 
         isLogin, 
         // doLogin, 
-        // doLogout, 
+        doLogout, 
         moveToPath, 
         moveToLogin, 
         moveToLoginReturn

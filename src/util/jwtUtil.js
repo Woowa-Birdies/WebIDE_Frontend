@@ -16,9 +16,13 @@ const refreshJWT = async (accessToken, refreshToken) => {
 }
 
 //before request
-const beforeReq = (config) => { console.log("before request.............")
+const beforeReq = (config) => { 
+    console.log("before request.............")
+    console.log(config)
+    console.log(config.data.accessToken)
     const memberInfo = getCookie('member')
-
+    console.log('member jwtutil', memberInfo)
+    
     if(!memberInfo) {
         console.log("Member NOT FOUND")
         return Promise.reject(
@@ -27,8 +31,20 @@ const beforeReq = (config) => { console.log("before request.............")
                     {error:"REQUIRE_LOGIN"}
                 }
             }
-        )
-    }
+            )
+        }
+        
+        console.log(config.data.accessToken)
+    const {accessToken} = memberInfo
+
+    console.log("accessToken", accessToken)
+    console.log("accessToken", config.data.accessToken)
+
+    // Authorization 헤더 처리 
+  config.headers.Authorization = `Bearer ${config.data.accessToken}`
+
+  console.log('config.header', config.headers)
+
   return config
 }
 //fail request
