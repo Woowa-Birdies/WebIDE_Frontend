@@ -2,8 +2,16 @@ import React, { useEffect, useState } from "react";
 import { FileTree } from "./FileTree";
 import { Terminal } from "./Terminal";
 import { CodeEditor } from "./CodeEditor";
+import { useCustomLogin } from '../../hooks/useCustomLogin'
 
 export const IDEPage = () => {
+  
+  const {isLogin, moveToLoginReturn} = useCustomLogin()
+
+  if(!isLogin) {
+    return moveToLoginReturn()
+  }
+  
   const [leftWidth, setLeftWidth] = useState(30); // 초기 왼쪽 너비 설정
   const [isResizing, setIsResizing] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);

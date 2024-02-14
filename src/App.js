@@ -10,6 +10,9 @@ import { MainPage } from "./pages/MainPage";
 import { MyPage } from "./pages/MyPage";
 import { LoginLoadingPage } from "./pages/LoginLandingPage/loadingPage";
 
+import SideMenu from './components/menus/SideMenu';
+import ChatPage from './pages/ChatPage/Chat';
+
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
 
@@ -24,17 +27,23 @@ const Layout = () => {
 };
 
 function App() {
+
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<LoginPage />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/login/kakao" element={<LoginLoadingPage />} />
-            <Route path="/mypage" element={<MyPage />} />
+          <Route path='/' element={<Layout />}>
+            <Route index element={<MainPage />} />
+            <Route path='login' element={<LoginPage />} />
+            <Route path='login/kakao' element={<LoginLoadingPage/>} />
+            <Route path="mypage" element={<MyPage />} />
 
-            <Route path="/ide" element={<IDEPage />} />
+            <Route path="ide" element={<IDEPage />} />
+          </Route>
+          <Route path='/' element={<SideMenu />} >
+            <Route index element={<MainPage />} />
+            <Route path='mypage' element={<MyPage/>} />
+            <Route path='chat' element={<ChatPage />} />
           </Route>
         </Routes>
       </Router>
