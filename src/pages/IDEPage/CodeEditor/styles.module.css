@@ -1,0 +1,6 @@
+.codeEditorContainer {
+  position: relative;
+  height: calc(100vh - 50px);
+  padding-top: 50px;
+  flex-shrink: 0;
+}
