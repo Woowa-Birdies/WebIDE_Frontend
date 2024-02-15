@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { getAccessToken, getMemberWithAccessToken } from '../../api/kakaoApi'
 import { useSearchParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/reducers/loginSlice'
 import { useCustomLogin } from '../../hooks/useCustomLogin'
 import { getGoogleAccessToken, getGoogleMemberWithAccesssToken } from '../../api/googleApi'
+import { Spin } from 'antd'
 
 export const LoginLoadingPage2 = () => {
 
@@ -36,9 +36,8 @@ export const LoginLoadingPage2 = () => {
   }, [code])
 
   return (
-    <div>
-      <div>로딩중</div>
-      <div></div>
-    </div>
+    <Spin style={{top:'30vh'}} tip="Loading..." size="large">
+      <div className="content" />
+    </Spin>
   )
 }

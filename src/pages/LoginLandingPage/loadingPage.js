@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../../redux/reducers/loginSlice'
 import { useCustomLogin } from '../../hooks/useCustomLogin'
+import { Spin } from 'antd'
 
 export const LoginLoadingPage = () => {
 
@@ -35,9 +36,8 @@ export const LoginLoadingPage = () => {
   }, [authCode])
 
   return (
-    <div>
-      <div>로딩중</div>
-      <div></div>
-    </div>
+    <Spin style={{top:'30vh'}} tip="Loading..." size="large">
+      <div className="content" />
+    </Spin>
   )
 }
