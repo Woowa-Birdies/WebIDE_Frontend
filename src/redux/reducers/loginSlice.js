@@ -22,12 +22,19 @@ const loginSlice = createSlice({
 
             setCookie('member', JSON.stringify(action.payload), 1)
 
+            localStorage.setItem('member', JSON.stringify(action.payload))
+
+            console.log(getCookie('member'))
+
             return action.payload
         },
         logout: () => {
             console.log("logout...")
 
             removeCookie('member')
+
+            localStorage.setItem('member', JSON.stringify([]))
+            localStorage.clear()
 
             return {...initState}
         },

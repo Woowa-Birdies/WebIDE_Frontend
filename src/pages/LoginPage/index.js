@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { getKakaoLoginLink } from '../../api/kakaoApi';
 import { Avatar } from 'antd';
 import { getGoogleLoginLink } from '../../api/googleApi';
+import googlelogo from '../../assets/images/googlelogo.png';
+import kakaologo from '../../assets/images/kakaologo.png';
 
 const Container = styled.div`
   display: flex;
@@ -30,14 +32,17 @@ const Title = styled.h1`
 `;
 
 const StyledButton = styled.a`
+  height: 30px;
   text-align: center;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-weight: 500;
   font-size: 0.875rem;
   padding: 0.625rem 1.25rem;
   border-radius: 0.375rem;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s;
   text-decoration: none;
@@ -49,19 +54,6 @@ const StyledButton = styled.a`
   }
   & > img {
     margin-right: 0.5rem;
-  }
-`;
-
-const FooterText = styled.div`
-  text-align: center;
-  margin-top: 1.5rem;
-`;
-
-const FooterLink = styled.a`
-  color: #4299e1;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
   }
 `;
 
@@ -83,38 +75,27 @@ export const LoginPage = () => {
     
     <Container>
       <Card>
-        <Title>Login</Title>
+        <Title>Login/Signup</Title>
         <div>
           <StyledButton
             href={googleOauthLink}
             bgColor="#1a73e8"
             hoverBgColor="#2c66a3"
           >
-            <img src="https://placehold.co/20x20" alt="Google logo" />
+            <img src={googlelogo} alt="Google logo" style={{width:'30px'}} />
             Login with Google
-          </StyledButton>
-          <StyledButton
-            // onClick={test}
-            bgColor="#333333"
-            hoverBgColor="#1a1a1a"
-          >
-            <img src="https://placehold.co/20x20" alt="GitHub logo" />
-            Login with Github
           </StyledButton>
           <StyledButton
             href={kakaoOauthLink}
             bgColor="#fee500"
             hoverBgColor="#e6c300"
           >
-            <img src="https://placehold.co/20x20" alt="Kakao logo" />
+            <img src={kakaologo} alt="Kakao logo" style={{width:'30px'}} />
             {/* <Link to={link}> */}
               Login with Kakao
               {/* </Link> */}
           </StyledButton>
         </div>
-        <FooterText>
-          You don’t have an account? <FooterLink href="#">Sign up</FooterLink>
-        </FooterText>
       </Card>
     </Container>
     </>
