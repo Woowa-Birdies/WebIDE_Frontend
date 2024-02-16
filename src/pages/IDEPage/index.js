@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FileTree } from "./FileTree";
-import { Terminal } from "./Terminal";
-import { CodeEditor } from "./CodeEditor";
-import { useCustomLogin } from '../../hooks/useCustomLogin'
+import { IdeTopBar } from "../../components/ide/IDETopBar";
+import { QuestionMenu } from "../../components/ide/QuestionMenu";
+import { CodeEditor } from "../../components/ide/CodeEditor";
+import { IdeBottomBar } from "../../components/ide/IDEBottomBar";
+import { useCustomLogin } from "../../hooks/useCustomLogin";
 
 export const IDEPage = () => {
   
@@ -50,12 +51,19 @@ export const IDEPage = () => {
 
   return (
     <div>
-      {/* <Terminal />
-      <FileTree /> */}
-      <CodeEditor
-        leftWidth={leftWidth}
+      <IdeTopBar />
+      <div>
+        <QuestionMenu leftWidth={leftWidth} handleMouseDown={handleMouseDown} />
+        <CodeEditor
+          leftWidth={leftWidth}
+          isDarkMode={isDarkMode}
+          setIsDarkMode={setIsDarkMode}
+        />
+      </div>
+      <IdeBottomBar
+        sender={sender}
+        setSender={setSender}
         isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
       />
     </div>
   );
