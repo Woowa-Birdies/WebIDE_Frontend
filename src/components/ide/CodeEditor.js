@@ -21,7 +21,7 @@ export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
     },
     suggest: {
       // 자동완성 제안 활성화
-      snippetsPreventQuickSuggestions: true,
+      snippetsPreventQuickSuggestions: false,
       suggestions: [],
     },
     padding: {

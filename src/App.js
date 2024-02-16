@@ -16,6 +16,7 @@ import ChatPage from "./pages/ChatPage/Chat";
 
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
+import { CreateProjectForm } from "./components/ide/CreateProjectForm";
 
 const Layout = () => {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/login/kakao" element={<LoginLoadingPage />} />
             <Route path="/login/google" element={<LoginLoadingPage2 />} />
             <Route path="/ide" element={<IDEPage />} />
+            <Route path="/form" element={<CreateProjectForm />} />
           </Route>
           <Route path="/" element={<SideMenu />}>
             <Route index element={<MainPage />} />
