@@ -32,7 +32,7 @@ const Title = styled.h1`
 `;
 
 const StyledButton = styled.a`
-  height: 30px;
+  height: 40px;
   text-align: center;
   display: flex;
   justify-content: center;

@@ -6,11 +6,11 @@ import { useCustomLogin } from '../../hooks/useCustomLogin'
 
 export const IDEPage = () => {
   
-  const {isLogin, moveToLoginReturn} = useCustomLogin()
+  // const {isLogin, moveToLoginReturn} = useCustomLogin()
 
-  if(!isLogin) {
-    return moveToLoginReturn()
-  }
+  // if(!isLogin) {
+  //   return moveToLoginReturn()
+  // }
   
   const [leftWidth, setLeftWidth] = useState(30); // 초기 왼쪽 너비 설정
   const [isResizing, setIsResizing] = useState(false);

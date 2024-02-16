@@ -92,7 +92,7 @@ export const ModifyComponent = () => {
               </InputWrapper>
               <InputWrapper>
                 <Button
-                  style={{marginRight:'10px'}}
+                  style={{marginRight:'10px', backgroundColor:'#1677ff'}}
                   type="primary"
                   loading={loadings[0]}
                   onClick={() => {
