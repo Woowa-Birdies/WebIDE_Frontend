@@ -1,4 +1,4 @@
-import { Alert, Button } from 'antd'
+import { Alert } from 'antd'
 import React from 'react'
 
 export const CustomAlert = (props) => {

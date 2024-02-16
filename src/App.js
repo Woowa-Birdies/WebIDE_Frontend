@@ -17,22 +17,12 @@ import ChatPage from "./pages/ChatPage/Chat";
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
 
-const Layout = () => {
-  return (
-    <div>
-      {/* <Nav/> */}
-
-      <Outlet />
-    </div>
-  );
-};
-
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/">
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/kakao" element={<LoginLoadingPage />} />
             <Route path="/login/google" element={<LoginLoadingPage2 />} />
