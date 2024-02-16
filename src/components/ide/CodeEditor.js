@@ -3,8 +3,8 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import SolarizedLightTheme from "monaco-themes/themes/Solarized-light.json";
 import SolarizedDarkTheme from "monaco-themes/themes/Solarized-dark.json";
 
-import styles from "./styles.module.css";
-import { IdeTopBar } from "../IDETopBar";
+import styles from "./CodeEditor.module.css";
+import { ResultArea } from "./ResultArea";
 
 export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
@@ -17,11 +17,11 @@ export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
     automaticLayout: true,
     fontSize: 14,
     minimap: {
-      enabled: false,
+      enabled: true,
     },
     suggest: {
       // 자동완성 제안 활성화
-      snippetsPreventQuickSuggestions: false,
+      snippetsPreventQuickSuggestions: true,
       suggestions: [],
     },
     padding: {
@@ -66,6 +66,11 @@ export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
     };
   }, [isResizing]);
 
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
   useEffect(() => {
     if (!monaco) return; // 모나코 인스턴스가 null이면 early return
 
@@ -83,8 +88,12 @@ export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
 
   return (
     <>
-      <IdeTopBar />
-      <div className={`${styles.codeEditorContainer}`}>
+      <div
+        className={`${styles.codeEditorContainer}`}
+        style={{
+          width: `${100 - leftWidth}%`,
+        }}
+      >
         <Editor
           height={`${topHeigth}%`}
           width="100%"
@@ -94,6 +103,11 @@ export const CodeEditor = ({ leftWidth, isDarkMode, setIsDarkMode }) => {
           onMount={handleEditorDidMount}
           options={editorOptions}
           // onChange={handleEditorChange}
+        />
+        <ResultArea
+          result={result}
+          topHeigth={topHeigth}
+          handleMouseDown={handleMouseDown}
         />
       </div>
     </>

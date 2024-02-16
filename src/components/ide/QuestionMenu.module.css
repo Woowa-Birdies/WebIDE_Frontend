@@ -1,0 +1,8 @@
+.questionMenuContainer {
+  flex-shrink: 0;
+  user-select: none;
+  position: relative;
+  float: left;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+}
