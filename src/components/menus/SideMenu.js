@@ -40,8 +40,6 @@ const SideMenu = () => {
 
   const [member, setMember] = useState(initState)
 
-  const [loadings, setLoadings] = useState([]);
-
   const [collapsed, setCollapsed] = useState(false);
 
   const [pathKey, setPathKey] = useState([])

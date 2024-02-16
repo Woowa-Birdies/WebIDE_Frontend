@@ -1,10 +1,9 @@
-import { Avatar, Button, Flex, Image, Input } from 'antd'
+import { Avatar, Button, Flex, Input, Popover, } from 'antd'
+import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components';
 import { deleteMember, modifyMember } from '../../api/memberApi';
-import { login } from '../../redux/reducers/loginSlice';
-import { useCustomLogin } from '../../hooks/useCustomLogin';
 
 const Container = styled.div`
   display: flex;
@@ -15,10 +14,11 @@ const Container = styled.div`
 
 const Card = styled.div`
   background-color: #ffffff;
-  width: 24rem;
+  width: 20rem;
 `;
 
 const InputWrapper = styled.div`
+  margin-top: 10px;
   display: flex:
   flex-direction: row;
 `;
@@ -35,11 +35,7 @@ export const ModifyComponent = () => {
 
     const [loadings, setLoadings] = useState([]);
 
-    const {doLogout} = useCustomLogin()
-
     const loginInfo = useSelector(state => state.loginSlice)
-
-    const dispatch = useDispatch()
 
     useEffect(() => {
         setMember({...loginInfo})
@@ -70,7 +66,7 @@ export const ModifyComponent = () => {
     }
 
     const handleClickModify = () => {
-      const result = modifyMember(member)
+      modifyMember(member)
     }
 
     const handleClickDelete = () => {
@@ -87,31 +83,34 @@ export const ModifyComponent = () => {
                   src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               /> */}
               <Avatar size={64} >{member.nickname[0]}</Avatar>
-              <p></p>
               <InputWrapper>
-                이메일
-                <Input name='email' value={member.email} variant='filled' disabled onChange={handleChange}/>
+                <Input prefix={<MailOutlined className="site-form-item-icon" />} name='email' value={member.email} variant='filled' disabled onChange={handleChange}/>
               </InputWrapper>
               <InputWrapper>
-                닉네임
-                <Input name='nickname' value={member.nickname} variant='filled' onChange={handleChange} />
+                {/* <Typography.Title level={5}>닉네임</Typography.Title> */}
+                <Input prefix={<UserOutlined className="site-form-item-icon" />}  name='nickname' value={member.nickname} variant='filled' onChange={handleChange} />
               </InputWrapper>
-              <Button 
-                type="primary" 
-                loading={loadings[0]} 
-                onClick={() => {
-                  enterLoading(0);
-                  handleClickModify()
-                }}
-              >
-                  수정하기
-              </Button>
-              <Button danger 
-                type="text"
-                onClick={() => {handleClickDelete()}}
-              >
-                  탈퇴하기
-              </Button>
+              <InputWrapper>
+                <Button
+                  style={{marginRight:'10px', backgroundColor:'#1677ff'}}
+                  type="primary"
+                  loading={loadings[0]}
+                  onClick={() => {
+                    enterLoading(0);
+                    handleClickModify()
+                  }}
+                >
+                    수정하기
+                </Button>
+                <Popover placement="bottom" content={'정말로 탈퇴하실건가요?🥹'} >
+                  <Button danger
+                    type="text"
+                    onClick={() => {handleClickDelete()}}
+                  >
+                      탈퇴하기
+                  </Button>
+                </Popover>
+              </InputWrapper>
               </Flex>
             </Card>
         </Container>

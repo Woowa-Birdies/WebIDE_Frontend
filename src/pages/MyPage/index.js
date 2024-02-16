@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ModifyComponent } from "../../components/member/ModifyComponent";
+import { ModifyComponent } from "../../components/member/modifyComponent";
 import { useCustomLogin } from "../../hooks/useCustomLogin";
 
 export const MyPage = () => {

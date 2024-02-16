@@ -42,8 +42,6 @@ export const getGoogleAccessToken = async (code) => {
 
 export const getGoogleMemberWithAccesssToken = async (accessInfo) => {
 
-    const header = {headers: {"Content-Type": "application/json"}}
-
     const res = await axios.post(member_info_url, accessInfo, )
 
     return res.data;
