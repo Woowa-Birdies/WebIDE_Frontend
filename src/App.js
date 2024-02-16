@@ -17,16 +17,6 @@ import { LoginLoadingPage2 } from './pages/LoginLandingPage/loadingPage2';
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
 
-const Layout = () => {
-  return (
-    <div>
-      {/* <Nav/> */}
-
-      <Outlet />
-    </div>
-  );
-};
-
 function App() {
 
   return (

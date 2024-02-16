@@ -66,7 +66,7 @@ export const ModifyComponent = () => {
     }
 
     const handleClickModify = () => {
-      const result = modifyMember(member)
+      modifyMember(member)
     }
 
     const handleClickDelete = () => {
