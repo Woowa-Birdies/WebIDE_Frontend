@@ -16,23 +16,24 @@ import ChatPage from "./pages/ChatPage/Chat";
 
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
-import { CreateProjectForm } from "./components/ide/CreateProjectForm";
+import { MyProjectPage } from "./pages/MyProjectPage";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/">
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/login/kakao" element={<LoginLoadingPage />} />
-            <Route path="/login/google" element={<LoginLoadingPage2 />} />
-            <Route path="/ide" element={<IDEPage />} />
-            <Route path="/form" element={<CreateProjectForm />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="login/kakao" element={<LoginLoadingPage />} />
+            <Route path="login/google" element={<LoginLoadingPage2 />} />
+            <Route path="ide" element={<IDEPage />} />
           </Route>
+
           <Route path="/" element={<SideMenu />}>
             <Route index element={<MainPage />} />
             <Route path="mypage" element={<MyPage />} />
+            <Route path="projects" element={<MyProjectPage />} />
             <Route path="chat" element={<ChatPage />} />
           </Route>
         </Routes>

@@ -6,16 +6,14 @@ import { IdeBottomBar } from "../../components/ide/IDEBottomBar";
 import { useCustomLogin } from "../../hooks/useCustomLogin";
 
 export const IDEPage = () => {
-  
-  // const {isLogin, moveToLoginReturn} = useCustomLogin()
+  // const { isLogin, moveToLoginReturn } = useCustomLogin();
 
-  // if(!isLogin) {
-  //   return moveToLoginReturn()
+  // if (!isLogin) {
+  //   return moveToLoginReturn();
   // }
-  
+
   const [leftWidth, setLeftWidth] = useState(30); // 초기 왼쪽 너비 설정
   const [isResizing, setIsResizing] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [sender, setSender] = useState("");
 
   useEffect(() => {
@@ -50,21 +48,13 @@ export const IDEPage = () => {
   };
 
   return (
-    <div>
+    <div className>
       <IdeTopBar />
       <div>
         <QuestionMenu leftWidth={leftWidth} handleMouseDown={handleMouseDown} />
-        <CodeEditor
-          leftWidth={leftWidth}
-          isDarkMode={isDarkMode}
-          setIsDarkMode={setIsDarkMode}
-        />
+        <CodeEditor leftWidth={leftWidth} />
       </div>
-      <IdeBottomBar
-        sender={sender}
-        setSender={setSender}
-        isDarkMode={isDarkMode}
-      />
+      <IdeBottomBar sender={sender} setSender={setSender} />
     </div>
   );
 };

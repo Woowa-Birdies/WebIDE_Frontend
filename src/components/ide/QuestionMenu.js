@@ -11,11 +11,11 @@ export const QuestionMenu = ({ leftWidth, handleMouseDown }) => {
         width: `${leftWidth}%`,
       }}
     >
-      <div className={`questionFont overflow-y-scroll w-full border-r`}>
+      <div className={`overflow-y-scroll w-full border-r`}>
         <div className={`text-3xl p-5 border-b`}>
           <ReactMarkDown remarkPlugins={[remarkGfm]}>Title</ReactMarkDown>
         </div>
-        <div className={`p-5 border-b`}>
+        <div className="p-5 border-b">
           <p className="text-lg mb-3">문제 설명</p>
           <ReactMarkDown remarkPlugins={[remarkGfm]}>Content</ReactMarkDown>
         </div>

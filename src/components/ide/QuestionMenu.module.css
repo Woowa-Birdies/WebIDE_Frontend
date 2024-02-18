@@ -3,6 +3,8 @@
   user-select: none;
   position: relative;
   float: left;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 100px);
   margin-top: 50px;
+  background-color: #002140;
+  color: white;
 }

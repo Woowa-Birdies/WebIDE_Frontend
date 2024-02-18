@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import Chat from "./Chat";
 // import Stopwatch from "./Stopwatch";
-import styles from "./IDEBottomBar.module.css";
+import { Button } from "antd";
 
 export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
   // const navigate = useNavigate();
@@ -49,24 +49,23 @@ export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
   return (
     <>
       <div
-        className={`${
-          styles.ideBottomBarContainer
-        } flex w-screen absolute bottom-0 border-t z-10 ${
-          isDarkMode ? "bg-zinc-800 text-white" : "bg-white"
-        }}`}
+        className={
+          "flex absolute w-screen bottom-0 border-t z-10 bg-[#001529] text-white"
+        }
       >
-        <div
-          className={` ${
-            isDarkMode ? "bg-zinc-800 text-white" : "bg-white"
-          } grow`}
-        ></div>
-        <div>Bottom Bar</div>
-        {/* <div className="pr-5 pt-2 pb-2">
-          <Stopwatch />
+        <p className="pl-5 pt-3 font-bold">응시자 이름</p>
+        <p className="pl-5 pt-3 font-bold">생년월일</p>
+        <div className="grow"></div>
+        <div className="flex items-center pr-5 pt-2 pb-2">
+          <Button
+            className="text-white font-semibold"
+            type="dashed"
+            shape="round"
+            onClick={""}
+          >
+            <p>CHAT</p>
+          </Button>
         </div>
-        <button className="pr-5 pt-2 pb-2" onClick={openChat}>
-          Chat
-        </button> */}
       </div>
     </>
   );
