@@ -1,22 +1,12 @@
-import React from 'react'
-import { useCustomLogin } from '../../hooks/useCustomLogin'
-import SideMenu from '../../components/menus/SideMenu'
-import { useSelector } from 'react-redux'
+import React from "react";
+import { useCustomLogin } from "../../hooks/useCustomLogin";
 
 export const MainPage = () => {
+  const { isLogin, moveToLoginReturn } = useCustomLogin();
 
-  const {isLogin, moveToLoginReturn} = useCustomLogin()
-
-
-  
-
-  if(!isLogin) {
-    return moveToLoginReturn()
+  if (!isLogin) {
+    return moveToLoginReturn();
   }
 
-  return (
-    <>
-      
-    </>
-  )
-}
+  return <></>;
+};

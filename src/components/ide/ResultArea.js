@@ -1,29 +1,27 @@
 import React from "react";
 // import styles from "./ResultArea.module.css";
 
-import { ResultTopBar } from "./ResultTopBar";
-
 export const ResultArea = ({ result, topHeigth, handleMouseDown }) => {
   return (
     <div
-      // className={`${styles.resultTermContainer} border-t`}
+      className="overflow-y-auto border-t"
       style={{
         maxHeight: `calc(100% - ${topHeigth}%)`,
       }}
     >
       <div
-        className="w-full h-1 cursor-row-resize "
+        className="w-full h-1 cursor-row-resize"
         onMouseDown={handleMouseDown}
       ></div>
-      <ResultTopBar />
-      <div>
-        <p className="pl-5 whitespace-pre-line">
-          {result.split("\n").map((line, index) => (
+      <div className="bg-[#002140] text-white">
+        <p className="p-3 whitespace-pre-line text-justify">
+          실행 결과 출력
+          {/* {result.split("\n").map((line, index) => (
             <span key={index}>
               {line}
               <br />
             </span>
-          ))}
+          ))} */}
         </p>
       </div>
     </div>

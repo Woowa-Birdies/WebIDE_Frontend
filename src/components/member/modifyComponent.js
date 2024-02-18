@@ -1,10 +1,9 @@
-import { Avatar, Button, Flex, Image, Input } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components';
-import { deleteMember, modifyMember } from '../../api/memberApi';
-import { login } from '../../redux/reducers/loginSlice';
-import { useCustomLogin } from '../../hooks/useCustomLogin';
+import { Avatar, Button, Flex, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import { deleteMember, modifyMember } from "../../api/memberApi";
+import { useCustomLogin } from "../../hooks/useCustomLogin";
 
 const Container = styled.div`
   display: flex;
@@ -24,96 +23,113 @@ const InputWrapper = styled.div`
 `;
 
 const initState = {
-    email: '',
-    pwd: '',
-    nickname: '',
-}
+  email: "",
+  pwd: "",
+  nickname: "",
+};
 
 export const ModifyComponent = () => {
+  const [member, setMember] = useState(initState);
 
-    const [member, setMember] = useState(initState)
+  const [loadings, setLoadings] = useState([]);
 
-    const [loadings, setLoadings] = useState([]);
+  const { doLogout } = useCustomLogin();
 
-    const {doLogout} = useCustomLogin()
+  const loginInfo = useSelector((state) => state.loginSlice);
 
-    const loginInfo = useSelector(state => state.loginSlice)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  useEffect(() => {
+    setMember({ ...loginInfo });
+  }, [loginInfo]);
 
-    useEffect(() => {
-        setMember({...loginInfo})
-    }, [loginInfo])
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 2000);
+  };
 
-    const enterLoading = (index) => {
-        setLoadings((prevLoadings) => {
-          const newLoadings = [...prevLoadings];
-          newLoadings[index] = true;
-          return newLoadings;
-        });
-        setTimeout(() => {
-          setLoadings((prevLoadings) => {
-            const newLoadings = [...prevLoadings];
-            newLoadings[index] = false;
-            return newLoadings;
-          });
-        }, 2000);
-      };
-    
-    const handleChange = (e) => {
+  const handleChange = (e) => {
+    member[e.target.name] = e.target.value;
 
-        member[e.target.name] = e.target.value
+    setMember({ ...member });
+    console.log(member.accessToken);
+    console.log(member);
+  };
 
-        setMember({...member})
-        console.log(member.accessToken)
-        console.log(member)
-    }
+  const handleClickModify = () => {
+    const result = modifyMember(member);
+  };
 
-    const handleClickModify = () => {
-      const result = modifyMember(member)
-    }
+  const handleClickDelete = () => {
+    deleteMember(member);
+  };
 
-    const handleClickDelete = () => {
-      deleteMember(member)
-    }
-
-    return (
-        <Container>
-            <Card>
-              <Flex gap="small" align="center" wrap="wrap" vertical="true">
-              {/* <Image
+  return (
+    <Container>
+      <Card>
+        <Flex gap="small" align="center" wrap="wrap" vertical="true">
+          {/* <Image
                   style={{ borderRadius:'50%' }}
                   width={100}
                   src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               /> */}
-              <Avatar size={64} >{member.nickname[0]}</Avatar>
-              <p></p>
-              <InputWrapper>
-                이메일
-                <Input name='email' value={member.email} variant='filled' disabled onChange={handleChange}/>
-              </InputWrapper>
-              <InputWrapper>
-                닉네임
-                <Input name='nickname' value={member.nickname} variant='filled' onChange={handleChange} />
-              </InputWrapper>
-              <Button 
-                type="primary" 
-                loading={loadings[0]} 
-                onClick={() => {
-                  enterLoading(0);
-                  handleClickModify()
-                }}
-              >
-                  수정하기
-              </Button>
-              <Button danger 
-                type="text"
-                onClick={() => {handleClickDelete()}}
-              >
-                  탈퇴하기
-              </Button>
-              </Flex>
-            </Card>
-        </Container>
-  )
-}
+          <Avatar size={64}>{member.nickname[0]}</Avatar>
+          <span className="h-1"></span>
+          <InputWrapper>
+            이메일
+            <Input
+              name="email"
+              value={member.email}
+              variant="filled"
+              disabled="true"
+              onChange={handleChange}
+              className="mt-2"
+            />
+          </InputWrapper>
+          <span className="h-1"></span>
+          <InputWrapper>
+            닉네임
+            <Input
+              name="nickname"
+              value={member.nickname}
+              variant="filled"
+              onChange={handleChange}
+              className="my-2"
+            />
+          </InputWrapper>
+          <span className="h-1"></span>
+          <Button
+            className="bg-[#1880ff]"
+            type="primary"
+            loading={loadings[0]}
+            onClick={() => {
+              enterLoading(0);
+              handleClickModify();
+            }}
+          >
+            수정
+          </Button>
+          <Button
+            danger
+            type="primary"
+            onClick={() => {
+              handleClickDelete();
+            }}
+          >
+            탈퇴
+          </Button>
+        </Flex>
+      </Card>
+    </Container>
+  );
+};
