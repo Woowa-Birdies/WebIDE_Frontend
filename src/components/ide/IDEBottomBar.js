@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // import Chat from "./Chat";
 // import Stopwatch from "./Stopwatch";
 import { Button } from "antd";
+import { WechatOutlined } from "@ant-design/icons";
 
 export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
   // const navigate = useNavigate();
@@ -63,7 +64,8 @@ export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
             shape="round"
             onClick={""}
           >
-            <p>CHAT</p>
+            <WechatOutlined />
+            CHAT
           </Button>
         </div>
       </div>
