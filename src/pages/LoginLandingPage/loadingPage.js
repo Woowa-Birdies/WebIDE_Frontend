@@ -27,7 +27,7 @@ export const LoginLoadingPage = () => {
         dispatch(login(memberInfo))
 
         if (memberInfo) {
-          moveToPath("/")
+          moveToPath("/projects")
         }
       })
 
