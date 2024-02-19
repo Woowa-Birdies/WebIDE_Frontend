@@ -17,6 +17,7 @@ import ChatPage from "./pages/ChatPage/Chat";
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
 import { MyProjectPage } from "./pages/MyProjectPage";
+import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
             <Route path="projects" element={<MyProjectPage />} />
             <Route path="chat" element={<ChatPage />} />
           </Route>
+
+          <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </Router>
     </div>

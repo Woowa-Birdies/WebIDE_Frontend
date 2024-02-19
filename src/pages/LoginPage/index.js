@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { getKakaoLoginLink } from "../../api/kakaoApi";
 import { Avatar } from "antd";
 import { getGoogleLoginLink } from "../../api/googleApi";
-import googleLogo from "../../assets/images/googleLogo.png";
-import kakaoLogo from "../../assets/images/kakaoLogo.png";
+import googleLogo from "../../assets/images/googlelogo.png";
+import kakaoLogo from "../../assets/images/kakaologo.png";
 
 const Container = styled.div`
   display: flex;
