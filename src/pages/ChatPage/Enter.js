@@ -8,7 +8,7 @@ import {
     DrawerContent,
     DrawerCloseButton,
   } from '@chakra-ui/react'
-import Message from './Message';
+import ChatRoom from './ChatRoom';
 function Enter() {
     const {isOpen,onOpen,onClose } = useDisclosure();
     const btnRef = useRef();
@@ -25,7 +25,7 @@ function Enter() {
                     <DrawerCloseButton />
                     <DrawerHeader>채팅방</DrawerHeader>
                     <DrawerBody>
-                        <Message />
+                        <ChatRoom />
                         <Input />
                         </DrawerBody>
                     <DrawerFooter><Button colorScheme='blue' size='xs'>전송</Button></DrawerFooter>

@@ -16,10 +16,9 @@ export const LoginLoadingPage = () => {
 
   const dispatch = useDispatch()
 
-
   useEffect(() => {
     getAccessToken(authCode).then(accessToken => {
-
+      
       getMemberWithAccessToken(accessToken).then(memberInfo => {
         console.log("-------------------------")
         console.log(memberInfo)
