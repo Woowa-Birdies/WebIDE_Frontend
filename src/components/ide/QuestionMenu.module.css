@@ -8,3 +8,7 @@
   background-color: #002140;
   color: white;
 }
+
+.overflow-y-scroll::-webkit-scrollbar {
+  background-color: #002140; /* WebKit 기반 브라우저(예: Chrome, Safari)의 스크롤바 */
+}
