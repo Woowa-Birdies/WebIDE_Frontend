@@ -5,11 +5,17 @@ import { useNavigate, useParams } from "react-router-dom";
 // import Stopwatch from "./Stopwatch";
 import { Button } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
+import { EnterChat } from "../chat/EnterChat";
 
 export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
   // const navigate = useNavigate();
   // const { uuidParam, questionIdParam } = useParams();
   // const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const showChat = () => {
+    setIsChatOpen(true);
+  };
 
   // // IDE로 리다이렉트시 url 파라미터에서 받을 내용
   // const [uuid, setUuid] = useState("");
@@ -62,11 +68,12 @@ export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
             className="text-white font-semibold"
             type="dashed"
             shape="round"
-            onClick={""}
+            onClick={showChat}
           >
             <WechatOutlined />
             CHAT
           </Button>
+          {isChatOpen ? <EnterChat setIsChatOpen={setIsChatOpen} /> : null}
         </div>
       </div>
     </>

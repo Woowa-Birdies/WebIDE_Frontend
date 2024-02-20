@@ -12,7 +12,6 @@ import { LoginLoadingPage } from "./pages/LoginLandingPage/loadingPage";
 import { LoginLoadingPage2 } from "./pages/LoginLandingPage/loadingPage2";
 
 import SideMenu from "./components/menus/SideMenu";
-import ChatPage from "./pages/ChatPage/Chat";
 
 import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
@@ -35,7 +34,6 @@ function App() {
             <Route index element={<MainPage />} />
             <Route path="mypage" element={<MyPage />} />
             <Route path="projects" element={<MyProjectPage />} />
-            <Route path="chat" element={<ChatPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage/>}/>

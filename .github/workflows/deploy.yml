@@ -43,5 +43,5 @@ jobs:
         run: |
           aws s3 sync \
             --region ap-northeast-2 \
-            build s3://webide-project \
+            build s3://webide-project-front \
             --delete

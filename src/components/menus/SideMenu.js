@@ -61,8 +61,6 @@ const SideMenu = () => {
     }
   }, [loginInfo, pathname]);
 
-  console.log(loginInfo.accessToken);
-
   return (
     <Layout
       style={{
@@ -125,7 +123,7 @@ const SideMenu = () => {
             </Popover>
             <Popover placement="bottom" content={member.email}>
               <Avatar style={{ margin: "auto 10px" }} src={member.profile}>
-                {member.nickname[0]}
+                {member.nickname}
               </Avatar>
             </Popover>
           </div>
