@@ -38,7 +38,7 @@ const Client = new Stomp.Client({
 const onClick = () => {
     Client.publish({
         destination: '/pub/chat',
-        body: JSON.stringify('First Message'),
+        body: JSON.stringify('First Message'),  // 임시로 first message 보내서 테스트
     });
 }
 const active = () => {
