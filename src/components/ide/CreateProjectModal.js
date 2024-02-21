@@ -46,6 +46,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
         name: value.project.name,
         problemId: value.project.problemId,
+
         memberId: member.memberId,
       })
       .then((response) => {
@@ -53,6 +54,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
         if (response.status == 201) {
           setProjectId(response.data);
         }
+
       })
       .catch((error) => {
         console.log(error);
@@ -112,11 +114,13 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
             onChange={onChange}
             // onSearch={onSearch}
             // filterOption={filterOption}
+
             options={problemList.map((problem) => ({
               key: problem.id,
               value: problem.id,
               label: problem.title,
             }))}
+
           />
         </Form.Item>
         <Form.Item
