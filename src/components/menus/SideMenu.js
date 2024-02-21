@@ -35,6 +35,7 @@ const initState = {
 const SideMenu = () => {
   const loginInfo = useSelector((state) => state.loginSlice);
   const { moveToPath, doLogout } = useCustomLogin();
+  const { isLogin, moveToLoginReturn } = useCustomLogin();
   const [member, setMember] = useState(initState);
   const [collapsed, setCollapsed] = useState(false);
   const [pathKey, setPathKey] = useState([]);
@@ -43,6 +44,10 @@ const SideMenu = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  if (!isLogin) {
+    return moveToLoginReturn();
+  }
 
   const handlePath = (e) => {
     if (e.key === "1") {
@@ -54,10 +59,10 @@ const SideMenu = () => {
 
   useEffect(() => {
     setMember({ ...loginInfo, pwd: "****" });
-    if (pathname === "/mypage") {
-      setPathKey(["2"]);
-    } else if (pathname === "/projects") {
+    if (pathname === "/projects") {
       setPathKey(["1"]);
+    } else if (pathname === "/mypage") {
+      setPathKey(["2"]);
     }
   }, [loginInfo, pathname]);
 
@@ -122,9 +127,10 @@ const SideMenu = () => {
               />
             </Popover>
             <Popover placement="bottom" content={member.email}>
-              <Avatar style={{ margin: "auto 10px" }} src={member.profile}>
-                {member.nickname}
-              </Avatar>
+              <Avatar
+                style={{ margin: "auto 10px" }}
+                src={member.profile}
+              ></Avatar>
             </Popover>
           </div>
         </Header>

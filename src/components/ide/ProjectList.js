@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Space, Table } from "antd";
+import { Table } from "antd";
 
 const columns = [
   {
@@ -62,6 +62,18 @@ const data = [
   },
 ];
 
-export const ProjectList = () => (
-  <Table columns={columns} dataSource={data} pagination={false} />
-);
+export const ProjectList = ({ member }) => {
+  useEffect(() => {
+    jwtAxios
+      .get(`${process.env.REACT_APP_API_SERVER_HOST}/projects`)
+      .then((response) => {
+        // console.log(response.data);
+        setProblemList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return <Table columns={columns} dataSource={data} pagination={false} />;
+};
