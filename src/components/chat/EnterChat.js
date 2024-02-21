@@ -1,5 +1,6 @@
 import React from "react";
 import { Drawer } from "antd";
+import ChatRoom from "./ChatRoom";
 
 export const EnterChat = ({ setIsChatOpen }) => {
   const showDrawer = () => {
@@ -12,9 +13,7 @@ export const EnterChat = ({ setIsChatOpen }) => {
   return (
     <>
       <Drawer title="Basic Drawer" onClose={onClose} open={showDrawer}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <ChatRoom />
       </Drawer>
     </>
   );
