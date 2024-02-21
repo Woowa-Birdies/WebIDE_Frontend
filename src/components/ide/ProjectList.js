@@ -1,59 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import jwtAxios from "../../util/jwtUtil";
 import { Button, Table } from "antd";
-
-const columns = [
-  {
-    title: "Project Name",
-    dataIndex: "projectName",
-    key: "projectName",
-    align: "center",
-    render: (text, record) => (
-      <Link to={`/projects/${record.key}`}>
-        <b>{text}</b>
-      </Link>
-    ),
-  },
-  {
-    title: "Problem Title",
-    dataIndex: "problemTitle",
-    key: "problemTitle",
-    align: "center",
-  },
-  {
-    title: "Candidate",
-    dataIndex: "candidate",
-    key: "candidate",
-    align: "center",
-  },
-  {
-    title: "Created at",
-    dataIndex: "createdAt",
-    key: "createdAt",
-    align: "center",
-  },
-  {
-    title: "Updated at",
-    dataIndex: "updatedAt",
-    key: "updatedAt",
-    align: "center",
-  },
-  {
-    title: "URL",
-    dataIndex: "projectURL",
-    key: "projectURL",
-    align: "center",
-    render: (text, record) => (
-      <Button>
-        <></>
-      </Button>
-    ),
-  },
-];
+import { ShareAltOutlined, FormOutlined } from "@ant-design/icons";
 
 export const ProjectList = ({ member }) => {
+  const navigate = useNavigate();
   const [projectList, setProjectList] = useState([]);
+  const columns = [
+    {
+      title: "Project Name",
+      dataIndex: "projectName",
+      key: "projectName",
+      align: "center",
+      render: (text, record) => (
+        <Link
+          to={`/ide/${member.memberId}/${record.projectId}`}
+          target="_blank"
+        >
+          <b>{text}</b>
+        </Link>
+      ),
+    },
+    {
+      title: "Problem Title",
+      dataIndex: "problemTitle",
+      key: "problemTitle",
+      align: "center",
+    },
+    {
+      title: "Candidate",
+      dataIndex: "candidate",
+      key: "candidate",
+      align: "center",
+    },
+    {
+      title: "Created at",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      align: "center",
+    },
+    {
+      title: "Updated at",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      align: "center",
+    },
+    {
+      title: "URL",
+      dataIndex: "projectURL",
+      key: "projectURL",
+      align: "center",
+      render: (text, record) => (
+        <Button icon={<ShareAltOutlined />} onClick="" />
+      ),
+    },
+    {
+      title: "Edit",
+      dataIndex: "edit",
+      key: "edit",
+      align: "center",
+      render: (text, record) => <Button icon={<FormOutlined />} href="" />,
+    },
+  ];
 
   useEffect(() => {
     jwtAxios
@@ -88,7 +97,7 @@ export const ProjectList = ({ member }) => {
       <Table
         columns={columns}
         dataSource={projectList.map((project) => ({
-          key: project.projectId,
+          projectId: project.projectId,
           projectName: project.projectName,
           problemTitle: project.problemTitle,
           candidate: project.candidateName,

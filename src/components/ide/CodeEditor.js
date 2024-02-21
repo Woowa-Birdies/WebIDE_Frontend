@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import Editor, { useMonaco } from "@monaco-editor/react";
 import NightOwlTheme from "monaco-themes/themes/Night Owl.json";
 import CobaltTheme from "monaco-themes/themes/Cobalt.json";
@@ -9,10 +10,12 @@ import OceanicNextTheme from "monaco-themes/themes/Oceanic Next.json";
 
 import styles from "./CodeEditor.module.css";
 import { ResultArea } from "./ResultArea";
+import { useParams } from "react-router-dom";
 
 export const CodeEditor = ({ leftWidth }) => {
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
+  const { memberIdParam, projectIdParam } = useParams();
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
 
@@ -78,17 +81,23 @@ export const CodeEditor = ({ leftWidth }) => {
   useEffect(() => {
     if (!monaco) return; // 모나코 인스턴스가 null이면 early return
 
-    // 원하는 이름으로 테마를 define
-    monaco.editor.defineTheme("nightOwl", NightOwlTheme);
-    monaco.editor.defineTheme("cobalt", CobaltTheme);
-    monaco.editor.defineTheme("blackboard", BlackboardTheme);
-    monaco.editor.defineTheme("gitHubDark", GitHubDarkTheme);
-    monaco.editor.defineTheme("tomorrowNight", TomorrowNightTheme);
-    monaco.editor.defineTheme("oceanicNext", OceanicNextTheme);
+    const initializeEditor = () => {
+      // 원하는 이름으로 테마를 define
+      monaco.editor.defineTheme("nightOwl", NightOwlTheme);
+      monaco.editor.defineTheme("cobalt", CobaltTheme);
+      monaco.editor.defineTheme("blackboard", BlackboardTheme);
+      monaco.editor.defineTheme("gitHubDark", GitHubDarkTheme);
+      monaco.editor.defineTheme("tomorrowNight", TomorrowNightTheme);
+      monaco.editor.defineTheme("oceanicNext", OceanicNextTheme);
 
-    // 모나코 에디터에 테마를 적용
-    monaco.editor.setTheme("nightOwl");
-  });
+      // 모나코 에디터에 테마를 적용
+      monaco.editor.setTheme("nightOwl");
+    };
+
+    const timeoutId = setTimeout(initializeEditor, 100); // 100ms 후에 테마 설정
+
+    return () => clearTimeout(timeoutId); // cleanup 함수에서 timeout 제거
+  }, [monaco]);
 
   return (
     <>
