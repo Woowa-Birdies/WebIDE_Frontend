@@ -1,5 +1,4 @@
 import React from "react";
-// import styles from "./ResultArea.module.css";
 
 export const ResultArea = ({ result, topHeigth, handleMouseDown }) => {
   return (

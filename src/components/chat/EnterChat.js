@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Button, Drawer } from "antd";
+import React from "react";
+import { Drawer } from "antd";
 import ChatRoom from "./ChatRoom";
+
 export const EnterChat = ({ setIsChatOpen }) => {
   const showDrawer = () => {
     setIsChatOpen(true);

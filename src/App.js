@@ -1,10 +1,6 @@
 import "./App.css";
-import {
-  Outlet,
-  Route,
-  BrowserRouter as Router,
-  Routes,
-} from "react-router-dom";
+import "./index.css";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage";
 import { MainPage } from "./pages/MainPage";
 import { MyPage } from "./pages/MyPage";
@@ -13,7 +9,6 @@ import { LoginLoadingPage2 } from "./pages/LoginLandingPage/loadingPage2";
 
 import SideMenu from "./components/menus/SideMenu";
 
-import "./index.css";
 import { IDEPage } from "./pages/IDEPage";
 import { MyProjectPage } from "./pages/MyProjectPage";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
@@ -36,7 +31,7 @@ function App() {
             <Route path="projects" element={<MyProjectPage />} />
           </Route>
 
-          <Route path="*" element={<NotFoundPage/>}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </div>

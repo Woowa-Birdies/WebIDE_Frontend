@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import jwtAxios from "../../util/jwtUtil";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import { Modal, Button, Form, Input, Select } from "antd";
 
 const layout = {
@@ -13,9 +11,21 @@ const layout = {
   },
 };
 
-export const CreateProjectModal = ({ setIsCreateProjectModalOpen }) => {
+export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
   const [problemList, setProblemList] = useState([]);
-  const loginInfo = useSelector((state) => state.loginSlice);
+  const [projectId, setProjectId] = useState("");
+
+  useEffect(() => {
+    jwtAxios
+      .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
+      .then((response) => {
+        // console.log(response.data);
+        setProblemList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const showModal = () => {
     setIsCreateProjectModalOpen(true);
@@ -25,33 +35,26 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen }) => {
     setIsCreateProjectModalOpen(false);
   };
 
-  const onChange = (test) => {
-    console.log(`Test selected : ${test}`);
+  const onChange = (value) => {
+    console.log("Test Selected : ", value);
   };
 
-  useEffect(() => {
-    jwtAxios
-      .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
-      .then((response) => {
-        console.log(response.data);
-        // setProblemList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  // console.log("problemList : ", problemList);
-
   const onSubmit = (value) => {
-    console.log("New project values:", value);
+    console.log("New project : ", value.project);
+
     jwtAxios
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
         name: value.project.name,
         problemId: value.project.problemId,
-        memberId: 1,
+
+        memberId: member.memberId,
       })
       .then((response) => {
         console.log(response);
+        if (response.status == 201) {
+          setProjectId(response.data);
+        }
+
       })
       .catch((error) => {
         console.log(error);
@@ -111,20 +114,13 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen }) => {
             onChange={onChange}
             // onSearch={onSearch}
             // filterOption={filterOption}
-            options={[
-              {
-                value: "Jack",
-                label: "Jack",
-              },
-              {
-                value: "lucy",
-                label: "Lucy",
-              },
-              {
-                value: "tom",
-                label: "Tom",
-              },
-            ]}
+
+            options={problemList.map((problem) => ({
+              key: problem.id,
+              value: problem.id,
+              label: problem.title,
+            }))}
+
           />
         </Form.Item>
         <Form.Item
