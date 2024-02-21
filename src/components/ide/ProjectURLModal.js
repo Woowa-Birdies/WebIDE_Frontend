@@ -1,141 +1,62 @@
 import React, { useState, useEffect } from "react";
 import jwtAxios from "../../util/jwtUtil";
-import { Modal, Button, Form, Input, Select } from "antd";
-
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
+import { Modal, Input, message } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 
 export const ProjectURLModal = ({ setIsProjectURLModalOpen, member }) => {
-  const [problemList, setProblemList] = useState([]);
+  const [projectUrl, setProjectUrl] = useState("");
   const [projectId, setProjectId] = useState("");
 
-  useEffect(() => {
-    jwtAxios
-      .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
-      .then((response) => {
-        // console.log(response.data);
-        setProblemList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
   const showModal = () => {
-    setIsCreateProjectModalOpen(true);
+    setIsProjectURLModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsProjectURLModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsProjectURLModalOpen(false);
   };
 
-  const closeModal = () => {
-    setIsCreateProjectModalOpen(false);
+  const handleCopyClick = () => {
+    // URL을 클립보드에 복사하는 함수
+    navigator.clipboard.writeText(projectUrl); // 프로젝트 URL을 클립보드에 복사
+    message.success("URL Copied to Clipboard"); // 성공 메시지 표시
   };
 
-  const onChange = (value) => {
-    console.log("Test Selected : ", value);
-  };
-
-  const onSubmit = (value) => {
-    console.log("New project : ", value.project);
-
-    jwtAxios
-      .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
-        name: value.project.name,
-        problemId: value.project.problemId,
-        memberId: member.memberId,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 201) {
-          setProjectId(response.data);
+  useEffect(() => {
+    // 프로젝트 URL을 가져오는 비동기 함수
+    const fetchProjects = async () => {
+      try {
+        const response = await jwtAxios.get(
+          `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}`
+        );
+        const data = response.data;
+        if (data && data.length > 0) {
+          // 첫 번째 프로젝트의 URL을 가져옴
+          setProjectUrl(data[0].projectURL);
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.error("Error fetching project URL:", error);
+      }
+    };
 
-    setIsCreateProjectModalOpen(false);
-  };
+    fetchProjects(); // 함수 호출
+  }, [member.memberId]);
 
   return (
     <Modal
-      title="Create Live Coding Test"
+      title="Project URL"
       open={showModal}
-      onCancel={closeModal}
-      footer={null} // footer를 비워서 기본 버튼이 사라지게 함
+      onOk={handleOk}
+      onCancel={handleCancel}
+      okButtonProps={{ className: "bg-[#1880ff]" }} // OK 버튼 배경색 변경
     >
-      <Form
-        {...layout}
-        name="create-project"
-        onFinish={onSubmit}
-        style={{
-          marginRight: 40,
-          maxWidth: 600,
-        }}
-      >
-        <Form.Item
-          name={["project", "name"]}
-          label="Project Name"
-          style={{
-            marginTop: 50,
-          }}
-          rules={[
-            {
-              required: true,
-              message: "프로젝트 이름을 입력해주세요",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name={["project", "problemId"]}
-          label="Select a Test"
-          style={{
-            marginTop: 30,
-          }}
-          rules={[
-            {
-              required: true,
-              message: "목록에서 문제를 선택해주세요",
-            },
-          ]}
-        >
-          <Select
-            // showSearch
-            placeholder="Select a Test from The List"
-            optionFilterProp="children"
-            onChange={onChange}
-            // onSearch={onSearch}
-            // filterOption={filterOption}
-            options={problemList.map((problem) => ({
-              key: problem.id,
-              value: problem.id,
-              label: problem.title,
-            }))}
-          />
-        </Form.Item>
-        <Form.Item
-          wrapperCol={{
-            ...layout.wrapperCol,
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <div className="flex gap-10 mt-5">
-            <Button className="bg-[#1880ff]" type="primary" htmlType="submit">
-              Create
-            </Button>
-            <Button type="default" onClick={closeModal}>
-              Cancel
-            </Button>
-          </div>
-        </Form.Item>
-      </Form>
+      <Input
+        className="mt-5 mb-5"
+        value={projectUrl} // 프로젝트 URL 표시
+        readOnly // 읽기 전용
+        addonAfter={<CopyOutlined onClick={handleCopyClick} />}
+      />
     </Modal>
   );
 };

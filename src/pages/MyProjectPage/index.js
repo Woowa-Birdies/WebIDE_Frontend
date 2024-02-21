@@ -28,7 +28,7 @@ export const MyProjectPage = () => {
     return moveToLoginReturn();
   }
 
-  const showModal = () => {
+  const showCreateProjectModal = () => {
     setIsCreateProjectModalOpen(true);
   };
 
@@ -41,7 +41,7 @@ export const MyProjectPage = () => {
           <Button
             className="ml-auto bg-[#1880ff] font-semibold"
             type="primary"
-            onClick={showModal}
+            onClick={showCreateProjectModal}
           >
             New
           </Button>

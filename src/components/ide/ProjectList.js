@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import jwtAxios from "../../util/jwtUtil";
 import { Button, Table } from "antd";
 import { ShareAltOutlined, FormOutlined } from "@ant-design/icons";
+import { ProjectURLModal } from "./ProjectURLModal";
 
 export const ProjectList = ({ member }) => {
-  const navigate = useNavigate();
   const [projectList, setProjectList] = useState([]);
+  const [isProjectURLModalOpen, setIsProjectURLModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsProjectURLModalOpen(true);
+  };
+
   const columns = [
     {
       title: "Project Name",
@@ -52,7 +58,7 @@ export const ProjectList = ({ member }) => {
       key: "projectURL",
       align: "center",
       render: (text, record) => (
-        <Button icon={<ShareAltOutlined />} onClick="" />
+        <Button icon={<ShareAltOutlined />} onClick={showModal} />
       ),
     },
     {
@@ -106,6 +112,12 @@ export const ProjectList = ({ member }) => {
         }))}
         pagination={false}
       />
+      {isProjectURLModalOpen ? (
+        <ProjectURLModal
+          setIsProjectURLModalOpen={setIsProjectURLModalOpen}
+          member={member}
+        />
+      ) : null}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import jwtAxios from "../../util/jwtUtil";
-import { Modal, Button, Form, Input, Select } from "antd";
+import { Modal, Button, Form, Input, DatePicker } from "antd";
 
 const layout = {
   labelCol: {
@@ -11,9 +11,9 @@ const layout = {
   },
 };
 
-export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
-  const [problemList, setProblemList] = useState([]);
-  const [projectId, setProjectId] = useState("");
+export const EnterCandidateModal = ({ project }) => {
+  const [isEnterCandidateModalOpen, setIsEnterCandidateModalOpen] =
+    useState(true);
 
   useEffect(() => {
     jwtAxios
@@ -28,50 +28,31 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
   }, []);
 
   const showModal = () => {
-    setIsCreateProjectModalOpen(true);
+    setIsEnterCandidateModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsCreateProjectModalOpen(false);
+    setIsEnterCandidateModalOpen(false);
   };
 
   const onChange = (value) => {
-    console.log("Test Selected : ", value);
+    console.log("Date Selected : ", value);
   };
 
   const onSubmit = (value) => {
-    console.log("New project : ", value.project);
-
-    jwtAxios
-      .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
-        name: value.project.name,
-        problemId: value.project.problemId,
-
-        memberId: member.memberId,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 201) {
-          setProjectId(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    setIsCreateProjectModalOpen(false);
+    console.log("Candidate info: ", value.candidate);
   };
 
   return (
     <Modal
-      title="Create Live Coding Test"
+      title="Enter Your Information"
       open={showModal}
       onCancel={closeModal}
       footer={null} // footer를 비워서 기본 버튼이 사라지게 함
     >
       <Form
         {...layout}
-        name="createProject"
+        name="enterCandidate"
         onFinish={onSubmit}
         style={{
           marginRight: 40,
@@ -79,47 +60,34 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
         }}
       >
         <Form.Item
-          name={["project", "name"]}
-          label="Project Name"
+          name={["candidate", "name"]}
+          label="Candidate Name"
           style={{
             marginTop: 50,
           }}
           rules={[
             {
               required: true,
-              message: "프로젝트 이름을 입력해주세요",
+              message: "이름을 입력하세요",
             },
           ]}
         >
-          <Input placeholder="Enter Your Project Name" />
+          <Input placeholder="Enter Your Name" />
         </Form.Item>
         <Form.Item
-          name={["project", "problemId"]}
-          label="Select a Test"
+          name={["candidate", "candidateBirthDate"]}
+          label="Birth Date"
           style={{
             marginTop: 30,
           }}
           rules={[
             {
               required: true,
-              message: "목록에서 문제를 선택해주세요",
+              message: "생년월일을 입력하세요",
             },
           ]}
         >
-          <Select
-            // showSearch
-            placeholder="Select a Test from The List"
-            optionFilterProp="children"
-            onChange={onChange}
-            // onSearch={onSearch}
-            // filterOption={filterOption}
-
-            options={problemList.map((problem) => ({
-              key: problem.id,
-              value: problem.id,
-              label: problem.title,
-            }))}
-          />
+          <DatePicker onChange={onChange} />
         </Form.Item>
         <Form.Item
           wrapperCol={{
@@ -133,7 +101,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
               Cancel
             </Button>
             <Button className="bg-[#1880ff]" type="primary" htmlType="submit">
-              Create
+              Submit
             </Button>
           </div>
         </Form.Item>
