@@ -21,12 +21,12 @@ export default function Messages({ projectId = 1 }) {
             roomId: 1,
             admin: {
               userId: 1,
-              profileImage: "/ss/sss.png",
+              profileImage: "http://aws.s3/ss/sss.png",
               nickname: "관리자1",
             },
             user: {
               userId: 1212,
-              profileImage: "xx.png",
+              profileImage: "http://aws.s3/xx.png",
               nickname: "구름",
             },
           };
@@ -64,7 +64,7 @@ export default function Messages({ projectId = 1 }) {
       console.error('채팅 데이터를 불러오는 중 에러가 발생했습니다.', error);
       setLoading(false);
     }*/
-    if (!loading && hasMore) {
+    if (!loading && hasMore && roomInfo.admin && roomInfo.user) {
       setLoading(true);
       // 더미 데이터 반환 시뮬레이션
       const dummyData = {
@@ -88,6 +88,20 @@ export default function Messages({ projectId = 1 }) {
         ],
         last: true
       };
+      console.log(roomInfo)
+      dummyData.content = dummyData.content.map(message => {
+        const isAdmin = message.sender === roomInfo.admin.userId;
+        const senderNickname = isAdmin ? roomInfo.admin.nickname : roomInfo.user.nickname;
+        const profileImage = isAdmin ? roomInfo.admin.profileImage : roomInfo.user.profileImage;
+  
+        return {
+          ...message,
+          isAdmin,
+          senderNickname,
+          profileImage
+        };
+      });
+      console.log('dummyData : ', dummyData.content)
 
       // 더미 데이터를 상태에 설정
       setChats((prevChats) => [...prevChats, ...dummyData.content]);

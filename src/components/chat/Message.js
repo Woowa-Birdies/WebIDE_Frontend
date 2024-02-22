@@ -10,7 +10,7 @@ const Message = ({ message }) => {
   return (
     <div className="border-b border-gray-200 p-4 flex flex-col">
       <div className="flex items-center mb-2">
-        <h5 className="font-bold">{message.sender}</h5>
+        <h5 className="font-bold">{message.senderNickname}</h5>
       </div>
       <div className="mb-2">
         <p>{message.message}</p>
