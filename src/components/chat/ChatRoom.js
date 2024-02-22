@@ -1,6 +1,7 @@
 import styles from './ChatRoom.module.css';
 import * as Stomp from '@stomp/stompjs';
 import { useSelector } from 'react-redux';
+import Messages from './Messages';
 import * as SockJS from 'sockjs-client';
 
 function ChatRoom() {
@@ -61,6 +62,7 @@ function ChatRoom() {
     return (
         <div>
             <div className={styles.container}>채팅 내용이 보이는 곳</div>
+            <Messages/>
             <button onClick={onClick}>전송</button>
             <button onClick={active}>연결</button>
         </div>
