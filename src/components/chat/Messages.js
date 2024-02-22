@@ -39,6 +39,13 @@ export default function Messages({ projectId = 1 }) {
     fetchRoomInfo();
   }, [projectId]);
 
+  useEffect(() => {
+    if (Object.keys(roomInfo).length > 0) {
+      // roomInfo가 설정된 후 fetchChats 함수 호출
+      fetchChats(1);
+    }
+  }, [roomInfo]); 
+
   const fetchChats = async (page) => {
     /*
         if (loading || !hasMore) return;
@@ -63,6 +70,7 @@ export default function Messages({ projectId = 1 }) {
     } catch (error) {
       console.error('채팅 데이터를 불러오는 중 에러가 발생했습니다.', error);
       setLoading(false);
+
     }*/
     if (!loading && hasMore && roomInfo.admin && roomInfo.user) {
       setLoading(true);
@@ -73,7 +81,7 @@ export default function Messages({ projectId = 1 }) {
             messageId: "5f8d04b3eaf7681a30c7f562",
             roomId: 1,
             message: "안녕하세요, 첫 번째 메시지입니다.",
-            sender: "user1",
+            sender: 1212,
             readUser: { user1: true, user2: false },
             createAt: "2023-03-01T12:00:00"
           },
@@ -81,14 +89,15 @@ export default function Messages({ projectId = 1 }) {
             messageId: "5f8d04b4eaf7681a30c7f563",
             roomId: 1,
             message: "이것은 두 번째 메시지입니다.",
-            sender: "user1",
+            sender: 1,
             readUser: { user1: true, user2: false },
             createAt: "2023-03-01T12:10:00"
           }
         ],
         last: true
       };
-      console.log(roomInfo)
+      console.log(roomInfo);
+      console.log('dummyData : ', dummyData.content)
       dummyData.content = dummyData.content.map(message => {
         const isAdmin = message.sender === roomInfo.admin.userId;
         const senderNickname = isAdmin ? roomInfo.admin.nickname : roomInfo.user.nickname;
