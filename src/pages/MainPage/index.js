@@ -4,6 +4,8 @@ import { useCustomLogin } from "../../hooks/useCustomLogin";
 export const MainPage = () => {
   const { isLogin, moveToLoginReturn, moveToPath } = useCustomLogin();
 
+  console.log('isLogin', isLogin)
+
   useEffect(() => {
     if (!isLogin) {
       return moveToLoginReturn();
