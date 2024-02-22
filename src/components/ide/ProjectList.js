@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table } from "antd";
+import jwtAxios from "../../util/jwtUtil";
 
 const columns = [
   {

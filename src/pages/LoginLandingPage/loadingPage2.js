@@ -19,11 +19,7 @@ export const LoginLoadingPage2 = () => {
 
   useEffect(() => {
     getGoogleAccessToken(code).then(resp => {
-        console.log('resp', resp)
-
-        getGoogleMemberWithAccesssToken(resp).then(memberInfo => {
-            console.log('---------')
-            console.log(memberInfo)
+        getGoogleMemberWithAccesssToken(resp.accessToken).then(memberInfo => {
 
             dispatch(login(memberInfo))
 
@@ -36,7 +32,7 @@ export const LoginLoadingPage2 = () => {
   }, [code])
 
   return (
-    <Spin style={{top:'30vh'}} tip="Loading..." size="large">
+    <Spin style={{top:'40vh'}} tip="Loading..." size="large">
       <div className="content" />
     </Spin>
   )
