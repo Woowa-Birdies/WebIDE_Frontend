@@ -110,7 +110,7 @@ export const CodeEditor = ({ leftWidth }) => {
         <Editor
           height={`${topHeigth}%`}
           width="100%"
-          defaultLanguage="python"
+          defaultLanguage="java"
           defaultValue="# Please enter the code"
           value={code}
           onMount={handleEditorDidMount}

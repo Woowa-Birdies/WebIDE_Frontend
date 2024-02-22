@@ -12,7 +12,6 @@ import SideMenu from "./components/menus/SideMenu";
 import { IDEPage } from "./pages/IDEPage";
 import { MyProjectPage } from "./pages/MyProjectPage";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
-import { EnterCandidateModal } from "./components/ide/EnterCandidateModal";
 
 function App() {
   return (
@@ -27,7 +26,10 @@ function App() {
               path="ide/:memberIdParam/:projectIdParam"
               element={<IDEPage />}
             />
-            <Route path="candi" element={<EnterCandidateModal />} />
+            <Route
+              path="ide/:memberIdParam/:projectIdParam/:keyHashParam"
+              element={<IDEPage />}
+            />
           </Route>
 
           <Route path="/" element={<SideMenu />}>

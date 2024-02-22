@@ -46,7 +46,6 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
         name: value.project.name,
         problemId: value.project.problemId,
-
         memberId: member.memberId,
       })
       .then((response) => {
@@ -109,7 +108,6 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
           <Select
             // showSearch
             placeholder="Select a Test from The List"
-            optionFilterProp="children"
             onChange={onChange}
             // onSearch={onSearch}
             // filterOption={filterOption}

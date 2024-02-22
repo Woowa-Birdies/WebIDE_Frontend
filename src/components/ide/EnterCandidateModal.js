@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import jwtAxios from "../../util/jwtUtil";
-import { Modal, Button, Form, Input, DatePicker } from "antd";
+import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
 
 const layout = {
   labelCol: {
@@ -11,43 +12,94 @@ const layout = {
   },
 };
 
-export const EnterCandidateModal = ({ project }) => {
-  const [isEnterCandidateModalOpen, setIsEnterCandidateModalOpen] =
-    useState(true);
-
-  useEffect(() => {
-    jwtAxios
-      .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
-      .then((response) => {
-        // console.log(response.data);
-        setProblemList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+export const EnterCandidateModal = ({
+  setIsEnterCandidateModalOpen,
+  projectId,
+}) => {
+  const [isPostSucceed, setIsPostSucceed] = useState(false);
+  const [isPatchSucceed, setIsPatchSucceed] = useState(false);
+  const [candidateId, setCandidateId] = useState("");
 
   const showModal = () => {
     setIsEnterCandidateModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsEnterCandidateModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsEnterCandidateModalOpen(false);
+  // };
 
-  const onChange = (value) => {
+  const onDateChange = (value) => {
     console.log("Date Selected : ", value);
   };
 
-  const onSubmit = (value) => {
-    console.log("Candidate info: ", value.candidate);
+  const onLanguageChange = (value) => {
+    console.log("Language Selected : ", value);
   };
+
+  const onSubmit = (value) => {
+    console.log("Candidate Info : ", {
+      candidateName: value.candidate.name,
+      // birthDate: value.candidate.birthDate.format("yyyy-MM-dd HH:mm:ss"),
+      birthDate: `${formatToLocalDateTime(value.candidate.birthDate)}`,
+      language: value.candidate.language,
+    });
+
+    axios
+      .post(`${process.env.REACT_APP_API_SERVER_HOST}/candidate/${projectId}`, {
+        candidateName: value.candidate.name,
+        birthDate: `${formatToLocalDateTime(value.candidate.birthDate)}`,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 201) {
+          console.log("Request Success.............");
+          setCandidateId(response.data);
+          // setIsPostSucceed(true);
+          setIsEnterCandidateModalOpen(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_SERVER_HOST}/projects/${projectId}/languages`,
+        {
+          language: value.candidate.language,
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          if (response.data == projectId) {
+            console.log("Request Success.............");
+            setIsPatchSucceed(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    if (isPostSucceed && isPatchSucceed) {
+      setIsEnterCandidateModalOpen(false);
+    }
+  };
+
+  function formatToLocalDateTime(dateTime) {
+    const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
+    const date = new Date(dateTime);
+    const localDateTime = new Date(date.getTime() + TIME_ZONE).toISOString();
+
+    return localDateTime;
+  }
 
   return (
     <Modal
       title="Enter Your Information"
       open={showModal}
-      onCancel={closeModal}
+      // onCancel={closeModal}
       footer={null} // footer를 비워서 기본 버튼이 사라지게 함
     >
       <Form
@@ -75,7 +127,7 @@ export const EnterCandidateModal = ({ project }) => {
           <Input placeholder="Enter Your Name" />
         </Form.Item>
         <Form.Item
-          name={["candidate", "candidateBirthDate"]}
+          name={["candidate", "birthDate"]}
           label="Birth Date"
           style={{
             marginTop: 30,
@@ -87,7 +139,36 @@ export const EnterCandidateModal = ({ project }) => {
             },
           ]}
         >
-          <DatePicker onChange={onChange} />
+          <DatePicker onChange={onDateChange} />
+        </Form.Item>
+        <Form.Item
+          name={["candidate", "language"]}
+          label="Select a Language"
+          style={{
+            marginTop: 30,
+          }}
+          rules={[
+            {
+              required: true,
+              message: "사용 언어를 선택하세요",
+            },
+          ]}
+        >
+          <Select
+            // showSearch
+            placeholder="Select a Test Language"
+            onChange={onLanguageChange}
+            options={[
+              {
+                value: "java",
+                label: "Java",
+              },
+              {
+                value: "python",
+                label: "Python",
+              },
+            ]}
+          />
         </Form.Item>
         <Form.Item
           wrapperCol={{
@@ -97,7 +178,10 @@ export const EnterCandidateModal = ({ project }) => {
           }}
         >
           <div className="flex gap-10 mt-5">
-            <Button type="default" onClick={closeModal}>
+            <Button
+              type="default"
+              // onClick={closeModal}
+            >
               Cancel
             </Button>
             <Button className="bg-[#1880ff]" type="primary" htmlType="submit">

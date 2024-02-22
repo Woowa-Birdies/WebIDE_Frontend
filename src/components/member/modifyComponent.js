@@ -33,9 +33,7 @@ const initState = {
 
 export const ModifyComponent = () => {
   const [member, setMember] = useState(initState);
-
   const [loadings, setLoadings] = useState([]);
-
   const [modal2Open, setModal2Open] = useState(false);
 
   const loginInfo = useSelector((state) => state.loginSlice);
@@ -63,13 +61,12 @@ export const ModifyComponent = () => {
 
   const handleChange = (e) => {
     member[e.target.name] = e.target.value;
-
     setMember({ ...member });
   };
 
   const handleClickModify = () => {
-    modifyMember(member).then(res => {
-      dispatch(login(res))
+    modifyMember(member).then((res) => {
+      dispatch(login(res));
     });
   };
 
@@ -119,17 +116,21 @@ export const ModifyComponent = () => {
             </Button>
             <Popover placement="bottom" content={"정말로 탈퇴하실건가요? 🥹"}>
               <Button
-                className="m-3 bg-[#fff1f0] font-semibold"
+                className="m-3 font-semibold"
                 danger
-                type="text"
+                type="primary"
                 onClick={() => {
-                  setModal2Open(true)
+                  setModal2Open(true);
                   // handleClickDelete();
                 }}
               >
                 탈퇴하기
               </Button>
-              <CustomModal setModal2Open={setModal2Open} modal2Open={modal2Open} handle={handleClickDelete} />
+              <CustomModal
+                setModal2Open={setModal2Open}
+                modal2Open={modal2Open}
+                handle={handleClickDelete}
+              />
             </Popover>
           </InputWrapper>
         </Flex>
