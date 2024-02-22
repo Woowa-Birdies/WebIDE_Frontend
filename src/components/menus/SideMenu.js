@@ -128,7 +128,7 @@ const SideMenu = () => {
             </Popover>
             <Popover placement="bottom" content={member.email}>
               <Avatar
-                style={{ margin: "auto 10px" }}
+                style={{ margin: "auto 10px", cursor: "pointer" }}
                 src={member.profile}
               ></Avatar>
             </Popover>
