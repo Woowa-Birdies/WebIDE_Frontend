@@ -1,6 +1,6 @@
 name: Frontend Deploy
 
-# 감지할 event : push, pull request
+# 감지할 event : push, pull request\
 on:
   push:
     branches:
