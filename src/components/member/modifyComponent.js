@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Avatar, Button, Flex, Input, Popover } from "antd";
 import { UserOutlined, MailOutlined } from "@ant-design/icons";
 import { deleteMember, modifyMember } from "../../api/memberApi";
 import { CustomModal } from "./CustomModal";
+import { login } from "../../redux/reducers/loginSlice";
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +40,8 @@ export const ModifyComponent = () => {
 
   const loginInfo = useSelector((state) => state.loginSlice);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setMember({ ...loginInfo });
   }, [loginInfo]);
@@ -65,7 +68,9 @@ export const ModifyComponent = () => {
   };
 
   const handleClickModify = () => {
-    modifyMember(member);
+    modifyMember(member).then(res => {
+      dispatch(login(res))
+    });
   };
 
   const handleClickDelete = () => {
