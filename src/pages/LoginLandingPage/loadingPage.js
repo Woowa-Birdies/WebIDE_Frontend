@@ -18,8 +18,6 @@ export const LoginLoadingPage = () => {
   useEffect(() => {
     getAccessToken(authCode).then((accessToken) => {
       getMemberWithAccessToken(accessToken).then((memberInfo) => {
-        console.log("-------------------------");
-        console.log(memberInfo);
 
         dispatch(login(memberInfo));
 
@@ -31,7 +29,7 @@ export const LoginLoadingPage = () => {
   }, [authCode]);
 
   return (
-    <Spin style={{ top: "30vh" }} tip="Loading..." size="large">
+    <Spin style={{ top: "40vh" }} tip="Loading..." size="large">
       <div className="content" />
     </Spin>
   );

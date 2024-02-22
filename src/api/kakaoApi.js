@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const rest_api_key = '70373458c672c5a028c1865dc3f3ec21'
-const redirect_uri = 'http://localhost:3000/login/kakao'
+const redirect_uri = `${process.env.REACT_APP_REDIRECT_URI}/login/kakao`
 
 const auth_code_path = `https://kauth.kakao.com/oauth/authorize`
 
@@ -35,7 +35,7 @@ export const getAccessToken = async (authCode) => {
 
 export const getMemberWithAccessToken = async (accessToken) => {
 
-    const res = await axios.get(`${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`)
+    const res = await axios.post(`${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao`, accessToken,)
 
     return res.data;
 }

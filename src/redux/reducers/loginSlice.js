@@ -38,23 +38,6 @@ const loginSlice = createSlice({
 
             return {...initState}
         },
-        // extraReducers: (builder) => {
-        //     builder.addCase( loginPostAsync.fulfilled, (state, action) => {
-        //         console.log("fulfilled")
-
-        //         const payload = action.payload
-
-        //         if(!payload.error){
-        //             setCookie("member", JSON.stringify(payload))
-        //         }
-        //     })
-        //     .addCase(loginPostAsync.pending, (state,action) => {
-        //         console.log("pending")
-        //     })
-        //     .addCase(loginPostAsync.rejected, (state,action) => {
-        //         console.log("rejected")
-        //     })
-        // }
     }
 })
 
