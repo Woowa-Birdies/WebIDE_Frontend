@@ -35,10 +35,13 @@ export const getAccessToken = async (authCode) => {
 };
 
 export const getMemberWithAccessToken = async (accessToken) => {
-  const res = await axios.get(
-    `${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`
+  // const res = await axios.get(
+  //   `${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`
+  // );
+  const res = await axios.post(
+    `${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao`,
+    accessToken
   );
-  // const res = await axios.post(`${process.env.REACT_APP_API_SERVER_HOST}/api/member/kakao`, accessToken,)
 
   return res.data;
 };

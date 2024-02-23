@@ -17,8 +17,8 @@ export const QuestionMenu = ({ projectInfo, leftWidth, handleMouseDown }) => {
             {projectInfo.title}
           </ReactMarkDown>
         </div>
-        <div className="p-5 border-b">
-          <p className="text-lg mb-3">{projectInfo.problem}</p>
+        <div className="p-5">
+          <p className="text-justify text-lg mb-3">{projectInfo.problem}</p>
         </div>
       </div>
       <div
