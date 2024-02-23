@@ -11,7 +11,11 @@ const layout = {
   },
 };
 
-export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
+export const CreateProjectModal = ({
+  setIsCreateProjectModalOpen,
+  member,
+  onCreateProject,
+}) => {
   const [problemList, setProblemList] = useState([]);
   const [projectId, setProjectId] = useState("");
 
@@ -21,6 +25,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
       .then((res) => {
         // console.log(res.data);
         setProblemList(res.data);
+        onCreateProject();
       })
       .catch((err) => {
         console.log(err);
@@ -44,14 +49,15 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
 
     jwtAxios
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
+        memberId: member.memberId,
         name: value.project.name,
         problemId: value.project.problemId,
-        memberId: member.memberId,
       })
       .then((res) => {
         console.log(res);
         if (res.status == 201) {
-          setProjectId(res.data);
+          setProjectId(res.data); // res.data: projectId
+          onCreateProject();
         }
       })
       .catch((err) => {

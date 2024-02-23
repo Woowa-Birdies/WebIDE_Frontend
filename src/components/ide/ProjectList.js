@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import jwtAxios from "../../util/jwtUtil";
 import { Button, Table } from "antd";
 import { ShareAltOutlined, FormOutlined } from "@ant-design/icons";
 import { ProjectURLModal } from "./ProjectURLModal";
 
-export const ProjectList = ({ member }) => {
-  const [projectList, setProjectList] = useState([]);
+export const ProjectList = ({ projectList, member }) => {
   const [selectedProjectId, setSelectedProjectId] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
   const [selectedProjectKeyHash, setSelectedProjectKeyHash] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
   const [isProjectURLModalOpen, setIsProjectURLModalOpen] = useState(false);
@@ -77,20 +75,6 @@ export const ProjectList = ({ member }) => {
     },
   ];
 
-  useEffect(() => {
-    jwtAxios
-      .get(
-        `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}`
-      )
-      .then((res) => {
-        console.log(res.data);
-        setProjectList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [member.memberId]);
-
   function formatDateTime(dateTime) {
     const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
     const date = new Date(dateTime);
@@ -113,7 +97,7 @@ export const ProjectList = ({ member }) => {
           projectId: project.projectId,
           projectName: project.projectName,
           problemTitle: project.problemTitle,
-          candidateName: project.candidateName,
+          candidate: project.candidateName || "-",
           createdAt: formatDateTime(project.createdAt),
           updatedAt: formatDateTime(project.updatedAt),
           keyHash: project.keyHash,
