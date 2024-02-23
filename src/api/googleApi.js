@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const redirect_uri = 'http://localhost:3000/login/google'
+const redirect_uri = `${process.env.REACT_APP_REDIRECT_URI}/login/google`
 const client_id = '897204801280-mtqigvolf1hqt41nvt390prsopj4ks88.apps.googleusercontent.com'
 const client_secret = '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'
 
@@ -40,9 +40,9 @@ export const getGoogleAccessToken = async (code) => {
     return resp
 }
 
-export const getGoogleMemberWithAccesssToken = async (accessInfo) => {
+export const getGoogleMemberWithAccesssToken = async (accessToken) => {
 
-    const res = await axios.post(member_info_url, accessInfo, )
+    const res = await axios.post(member_info_url, accessToken, )
 
     return res.data;
 }
