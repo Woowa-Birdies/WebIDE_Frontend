@@ -7,7 +7,7 @@ import { Button } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 import { EnterChat } from "../chat/EnterChat";
 
-export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
+export const IdeBottomBar = ({ sender, setSender }) => {
   // const navigate = useNavigate();
   // const { uuidParam, questionIdParam } = useParams();
   // const [isChatOpen, setIsChatOpen] = useState(false);
@@ -53,6 +53,7 @@ export const IdeBottomBar = ({ sender, setSender, isDarkMode }) => {
   // const openChat = () => {
   //   isChatOpen ? setIsChatOpen(false) : setIsChatOpen(true);
   // };
+
   return (
     <>
       <div

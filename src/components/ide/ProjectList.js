@@ -7,9 +7,13 @@ import { ProjectURLModal } from "./ProjectURLModal";
 
 export const ProjectList = ({ member }) => {
   const [projectList, setProjectList] = useState([]);
+  const [selectedProjectId, setSelectedProjectId] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
+  const [selectedProjectKeyHash, setSelectedProjectKeyHash] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
   const [isProjectURLModalOpen, setIsProjectURLModalOpen] = useState(false);
 
-  const showModal = () => {
+  const showModal = (projectId, projectKeyHash) => {
+    setSelectedProjectId(projectId);
+    setSelectedProjectKeyHash(projectKeyHash);
     setIsProjectURLModalOpen(true);
   };
 
@@ -58,7 +62,10 @@ export const ProjectList = ({ member }) => {
       key: "projectURL",
       align: "center",
       render: (text, record) => (
-        <Button icon={<ShareAltOutlined />} onClick={showModal} />
+        <Button
+          icon={<ShareAltOutlined />}
+          onClick={() => showModal(record.projectId, record.keyHash)} // showModal 함수에 프로젝트의 projectId, keyHash 전달
+        />
       ),
     },
     {
@@ -75,12 +82,12 @@ export const ProjectList = ({ member }) => {
       .get(
         `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}`
       )
-      .then((response) => {
-        console.log(response.data);
-        setProjectList(response.data);
+      .then((res) => {
+        console.log(res.data);
+        setProjectList(res.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }, [member.memberId]);
 
@@ -106,15 +113,18 @@ export const ProjectList = ({ member }) => {
           projectId: project.projectId,
           projectName: project.projectName,
           problemTitle: project.problemTitle,
-          candidate: project.candidateName,
+          candidateName: project.candidateName,
           createdAt: formatDateTime(project.createdAt),
           updatedAt: formatDateTime(project.updatedAt),
+          keyHash: project.keyHash,
         }))}
         pagination={false}
       />
       {isProjectURLModalOpen ? (
         <ProjectURLModal
           setIsProjectURLModalOpen={setIsProjectURLModalOpen}
+          selectedProjectId={selectedProjectId}
+          selectedProjectKeyHash={selectedProjectKeyHash} // 선택된 프로젝트의 keyHash 전달
           member={member}
         />
       ) : null}
