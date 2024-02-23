@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import jwtAxios from "../../util/jwtUtil";
-import { IdeTopBar } from "../../components/ide/IDETopBar";
 import { QuestionMenu } from "../../components/ide/QuestionMenu";
 import { CodeEditor } from "../../components/ide/CodeEditor";
 import { IdeBottomBar } from "../../components/ide/IDEBottomBar";
@@ -93,20 +91,19 @@ export const IDEPage = () => {
 
   return (
     <div>
-      <IdeTopBar />
       <div>
         <QuestionMenu
           project={project}
           leftWidth={leftWidth}
           handleMouseDown={handleMouseDown}
         />
-        <CodeEditor leftWidth={leftWidth} />
+        <CodeEditor project={project} leftWidth={leftWidth} />
       </div>
       <IdeBottomBar project={project} />
       {isEnterCandidateModalOpen ? (
         <EnterCandidateModal
           setIsEnterCandidateModalOpen={setIsEnterCandidateModalOpen}
-          projectId={projectIdParam}
+          projectId={project.projectId}
           onCandidateEnter={handleCandidateEntered}
         />
       ) : null}

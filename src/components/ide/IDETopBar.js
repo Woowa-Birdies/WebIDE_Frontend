@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 
-export const IdeTopBar = () => {
+export const IdeTopBar = ({ onRun }) => {
   return (
     <div className="flex items-center fixed w-screen z-10 border-b bg-[#001529] text-white">
       <a href="">
@@ -23,7 +23,7 @@ export const IdeTopBar = () => {
           className="bg-[#1880ff] font-semibold"
           type="primary"
           shape="round"
-          onClick={""}
+          onClick={onRun}
         >
           <p>RUN</p>
         </Button>

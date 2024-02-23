@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./QuestionMenu.module.css";
 import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
