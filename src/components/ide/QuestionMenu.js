@@ -18,7 +18,9 @@ export const QuestionMenu = ({ project, leftWidth, handleMouseDown }) => {
           </ReactMarkDown>
         </div>
         <div className="p-5">
-          <p className="text-justify text-lg mb-3">{project.problem}</p>
+          <p className="whitespace-pre-line text-justify text-lg mb-3">
+            {project.problem}
+          </p>
         </div>
       </div>
       <div
