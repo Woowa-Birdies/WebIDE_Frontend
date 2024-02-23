@@ -28,26 +28,6 @@ export const ProjectURLModal = ({
     message.success("URL Copied to Clipboard"); // 성공 메시지 표시
   };
 
-  // useEffect(() => {
-  //   // 프로젝트 URL을 가져오는 비동기 함수
-  //   const fetchProjects = async () => {
-  //     try {
-  //       const response = await jwtAxios.get(
-  //         `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}/${selectedProjectKeyHash}`
-  //       );
-  //       const data = response.data;
-  //       if (data && data.length > 0) {
-  //         // 첫 번째 프로젝트의 URL을 가져옴
-  //         setProjectUrl(data[0].projectURL);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching project URL:", error);
-  //     }
-  //   };
-
-  //   fetchProjects(); // 함수 호출
-  // }, [member.memberId]);
-
   return (
     <Modal
       title="Project URL"

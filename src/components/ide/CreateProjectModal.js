@@ -18,12 +18,12 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
   useEffect(() => {
     jwtAxios
       .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
-      .then((response) => {
-        // console.log(response.data);
-        setProblemList(response.data);
+      .then((res) => {
+        // console.log(res.data);
+        setProblemList(res.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -48,14 +48,14 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
         problemId: value.project.problemId,
         memberId: member.memberId,
       })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 201) {
-          setProjectId(response.data);
+      .then((res) => {
+        console.log(res);
+        if (res.status == 201) {
+          setProjectId(res.data);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
 
     setIsCreateProjectModalOpen(false);

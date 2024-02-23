@@ -10,12 +10,10 @@ import OceanicNextTheme from "monaco-themes/themes/Oceanic Next.json";
 
 import styles from "./CodeEditor.module.css";
 import { ResultArea } from "./ResultArea";
-import { useParams } from "react-router-dom";
 
 export const CodeEditor = ({ leftWidth }) => {
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
-  const { memberIdParam, projectIdParam } = useParams();
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
 

@@ -49,17 +49,17 @@ export const EnterCandidateModal = ({
         candidateName: value.candidate.name,
         birthDate: `${formatToLocalDateTime(value.candidate.birthDate)}`,
       })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 201) {
+      .then((res) => {
+        console.log(res);
+        if (res.status == 201) {
           console.log("Request Success.............");
-          setCandidateId(response.data);
+          setCandidateId(res.data);
           // setIsPostSucceed(true);
           setIsEnterCandidateModalOpen(false);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
 
     axios
@@ -69,17 +69,17 @@ export const EnterCandidateModal = ({
           language: value.candidate.language,
         }
       )
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          if (response.data == projectId) {
+      .then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          if (res.data == projectId) {
             console.log("Request Success.............");
             setIsPatchSucceed(true);
           }
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
 
     if (isPostSucceed && isPatchSucceed) {
@@ -166,6 +166,10 @@ export const EnterCandidateModal = ({
               {
                 value: "python",
                 label: "Python",
+              },
+              {
+                value: "cpp",
+                label: "C++",
               },
             ]}
           />

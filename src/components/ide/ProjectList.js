@@ -82,12 +82,12 @@ export const ProjectList = ({ member }) => {
       .get(
         `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}`
       )
-      .then((response) => {
-        console.log(response.data);
-        setProjectList(response.data);
+      .then((res) => {
+        console.log(res.data);
+        setProjectList(res.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }, [member.memberId]);
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import jwtAxios from "../../util/jwtUtil";
 import { IdeTopBar } from "../../components/ide/IDETopBar";
 import { QuestionMenu } from "../../components/ide/QuestionMenu";
@@ -11,8 +12,27 @@ import { EnterCandidateModal } from "../../components/ide/EnterCandidateModal";
 export const IDEPage = () => {
   const { memberIdParam, projectIdParam, keyHashParam } = useParams();
   const { isLogin, moveToLoginReturn } = useCustomLogin();
+  const [projectInfo, setProjectInfo] = useState("");
   const [isEnterCandidateModalOpen, setIsEnterCandidateModalOpen] =
     useState(false);
+
+  const fetchProblem = async (setState) => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${memberIdParam}/${projectIdParam}`
+      )
+      .then((res) => {
+        setState(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchProblem(setProjectInfo);
+    console.log(projectInfo);
+  }, []);
 
   if (!isLogin && !keyHashParam) {
     // 로그인되어 있지 않고 keyHashParam도 존재하지 않는 경우 로그인 창으로 이동
@@ -65,7 +85,11 @@ export const IDEPage = () => {
     <div>
       <IdeTopBar />
       <div>
-        <QuestionMenu leftWidth={leftWidth} handleMouseDown={handleMouseDown} />
+        <QuestionMenu
+          projectInfo={projectInfo}
+          leftWidth={leftWidth}
+          handleMouseDown={handleMouseDown}
+        />
         <CodeEditor leftWidth={leftWidth} />
       </div>
       <IdeBottomBar sender={sender} setSender={setSender} />
