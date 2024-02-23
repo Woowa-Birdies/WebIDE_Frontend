@@ -1,9 +1,11 @@
-import React, { useCallback, Fragment, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { List, Skeleton } from 'antd';
 import Message from './Message';
 
-export default function Messages({ projectId = 1 }) {
+export default function Messages() {
+  let projectId = useParams();
   const [roomInfo, setRoomInfo] = useState({});
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
