@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { getKakaoLoginLink } from "../../api/kakaoApi";
 import { getGoogleLoginLink } from "../../api/googleApi";
-import googleLogo from "../../assets/images/googlelogo.png";
-import kakaoLogo from "../../assets/images/kakaologo.png";
+import googleLogo from "../../assets/images/googleLogo.png";
+import kakaoLogo from "../../assets/images/kakaoLogo.png";
 
 const Container = styled.div`
   display: flex;
