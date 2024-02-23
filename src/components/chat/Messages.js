@@ -83,7 +83,7 @@ export default function Messages({ projectId = 1 }) {
             message: "안녕하세요, 첫 번째 메시지입니다.",
             sender: 1212,
             readUser: { user1: true, user2: false },
-            createAt: "2023-03-01T12:00:00"
+            createdAt: "2023-03-01T12:00:00"
           },
           {
             messageId: "5f8d04b4eaf7681a30c7f563",
@@ -91,7 +91,7 @@ export default function Messages({ projectId = 1 }) {
             message: "이것은 두 번째 메시지입니다.",
             sender: 1,
             readUser: { user1: true, user2: false },
-            createAt: "2023-03-01T12:10:00"
+            createdAt: "2023-03-01T12:10:00"
           }
         ],
         last: true
@@ -142,18 +142,65 @@ export default function Messages({ projectId = 1 }) {
     }
   }, [chats]);
 
-
+  /*
   return (
     <div ref={listContainerRef} className="overflow-auto h-full" style={{height: '500px'}}>
       <List 
         dataSource={chats}
         renderItem={(item) => (
-          <List.Item key={item.messageId}>
+          <List.Item key={item.messageId} style={{ borderBottom: 'none' }}>
             <Skeleton avatar title={false} loading={item.loading} active>
               <Message message={item} />
             </Skeleton>
           </List.Item>
         )}
+      />
+    </div>
+  );*/
+  function addDateDividers(messages) {
+    const enhancedMessages = [];
+    let lastDate = null;
+  
+    messages.forEach((message) => {
+      // createdAt 속성의 존재 여부를 확인
+      console.log('message : ', message);
+      if (message.createdAt) {
+        const messageDate = message.createdAt.split('T')[0];
+        if (messageDate !== lastDate) {
+          enhancedMessages.push({ type: 'dateDivider', date: messageDate });
+          lastDate = messageDate;
+        }
+      }
+      enhancedMessages.push({ ...message, type: 'message' });
+    });
+  
+    return enhancedMessages;
+  }
+  
+  return (
+    <div ref={listContainerRef} className="overflow-auto h-full" style={{ height: '500px' }}>
+      <List
+        dataSource={addDateDividers(chats)} // 날짜 구분자가 추가된 메시지 목록
+        renderItem={item => {
+          // 날짜 구분자 렌더링
+          if (item.type === 'dateDivider') {
+            return (
+              <List.Item style={{ borderBottom: 'none' }}>
+                <div className="date-divider text-center py-2 my-2 mx-auto bg-gray-100 text-gray-600 rounded-full w-auto inline-block px-4">
+                  {item.date}
+                </div>
+              </List.Item>
+            );
+          }
+          // 메시지 렌더링
+          return (
+            <List.Item key={item.messageId} style={{ borderBottom: 'none' }}>
+              <Skeleton avatar title={false} loading={item.loading} active>
+                <Message message={item} />
+              </Skeleton>
+            </List.Item>
+          );
+        }}
       />
     </div>
   );
