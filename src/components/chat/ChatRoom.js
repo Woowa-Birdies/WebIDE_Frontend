@@ -1,8 +1,8 @@
-import styles from './ChatRoom.module.css';
-import * as Stomp from '@stomp/stompjs';
-import { useSelector } from 'react-redux';
-import Messages from './Messages';
-import * as SockJS from 'sockjs-client';
+import styles from "./ChatRoom.module.css";
+import * as Stomp from "@stomp/stompjs";
+import { useSelector } from "react-redux";
+import Messages from "./Messages";
+import * as SockJS from "sockjs-client";
 
 function ChatRoom() {
   const jwtToken = useSelector((state) => state.loginSlice.accessToken);
@@ -57,23 +57,25 @@ function ChatRoom() {
       body: JSON.stringify("First Message"), // 임시로 first message 보내서 테스트
     });
     const onClick = () => {
-        console.log('success');
-        Client.publish({
-            destination: '/pub/chat',
-            body: JSON.stringify('First Message'),  // 임시로 first message 보내서 테스트
-        });
-    }
+      console.log("success");
+      Client.publish({
+        destination: "/pub/chat",
+        body: JSON.stringify("First Message"), // 임시로 first message 보내서 테스트
+      });
+    };
     const active = () => {
-        Client.activate();
-        console.log("client :",Client);
-    }
+      Client.activate();
+      console.log("client :", Client);
+    };
     return (
-        <div>
-            <div className={styles.container}>채팅 내용이 보이는 곳</div>
-            <Messages/>
-            <button onClick={onClick}>전송</button>
-            <button onClick={active}>연결</button>
-        </div>
+      <div>
+        <div className={styles.container}>채팅 내용이 보이는 곳</div>
+        <Messages />
+        <button onClick={onClick}>전송</button>
+        <button onClick={active}>연결</button>
+      </div>
     );
+  };
 }
+
 export default ChatRoom;
