@@ -3,10 +3,15 @@ import { useSelector } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import { Button, Flex,Input } from 'antd';
 
-function ChatRoom() {
+function ChatRoom({parameters}) {
   const jwtToken = useSelector((state) => state.loginSlice.accessToken);
   const [client, setClient] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
+  const { TextArea } = Input;
+
+  const { projectIdParam } = parameters;
+
+  console.log("값",projectIdParam);
   useEffect(() => {
     const newClient = new Client({
       brokerURL: "ws://localhost:8080/ws", // 서버의 WebSocket 연결 주소
@@ -18,7 +23,7 @@ function ChatRoom() {
       },
       onConnect: () => {
         console.log("Connected to STOMP");
-        newClient.subscribe('/sub/chat', (payload) => {
+        newClient.subscribe(`/sub/chat/${projectIdParam}`, (payload) => {
           console.log("Received message", payload.body);
           displayMessage(JSON.parse(payload.body).message);
         });
@@ -40,7 +45,7 @@ function ChatRoom() {
     if (client && client.connected) {
       console.log("Sending message");
       client.publish({
-        destination: '/pub/chat',
+        destination: `/pub/chat/${projectIdParam}`,
         body: JSON.stringify({ message: inputMessage }),
       });
       setInputMessage('');
@@ -56,7 +61,6 @@ function ChatRoom() {
     showMessage[0].appendChild(createMessage);
   }
 
-  const { TextArea } = Input;
   return (
     <div>
         <div className="chatLog"></div>
