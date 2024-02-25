@@ -51,7 +51,7 @@ export const IDEPage = () => {
     fetchProject();
   }, [memberIdParam, projectIdParam]);
 
-  const handleCandidateEntered = () => {
+  const handleProjectChange = () => {
     fetchProject();
   };
 
@@ -97,14 +97,18 @@ export const IDEPage = () => {
           leftWidth={leftWidth}
           handleMouseDown={handleMouseDown}
         />
-        <CodeEditor project={project} leftWidth={leftWidth} />
+        <CodeEditor
+          project={project}
+          leftWidth={leftWidth}
+          onEditorChange={handleProjectChange}
+        />
       </div>
-      <IdeBottomBar project={project} />
+      <IdeBottomBar project={project} onCandidateEnter={handleProjectChange} />
       {isEnterCandidateModalOpen ? (
         <EnterCandidateModal
           setIsEnterCandidateModalOpen={setIsEnterCandidateModalOpen}
           projectId={project.projectId}
-          onCandidateEnter={handleCandidateEntered}
+          onCandidateEnter={handleProjectChange}
         />
       ) : null}
     </div>

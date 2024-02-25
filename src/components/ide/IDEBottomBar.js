@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 // import Stopwatch from "./Stopwatch";
 import { Button } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import { EnterChat } from "../chat/EnterChat";
 
 export const IdeBottomBar = ({ project }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { memberIdParam, projectIdParam } = useParams();
 
   const showChat = () => {
     setIsChatOpen(true);
@@ -53,7 +54,13 @@ export const IdeBottomBar = ({ project }) => {
             <WechatOutlined />
             CHAT
           </Button>
-          {isChatOpen ? <EnterChat setIsChatOpen={setIsChatOpen} /> : null}
+          {isChatOpen ? (
+            <EnterChat
+              setIsChatOpen={setIsChatOpen}
+              memberIdParam={memberIdParam}
+              projectIdParam={projectIdParam}
+            />
+          ) : null}
         </div>
       </div>
     </>

@@ -3,7 +3,7 @@ import { Drawer } from "antd";
 import ChatRoom from "./ChatRoom";
 import { useParams } from "react-router-dom";
 
-export const EnterChat = ({ setIsChatOpen}) => {
+export const EnterChat = ({ setIsChatOpen }) => {
   const parameters = useParams();
   const showDrawer = () => {
     setIsChatOpen(true);
@@ -15,7 +15,7 @@ export const EnterChat = ({ setIsChatOpen}) => {
   return (
     <>
       <Drawer title="채팅방" onClose={onClose} open={showDrawer}>
-        <ChatRoom parameters={parameters}/>
+        <ChatRoom parameters={parameters} />
       </Drawer>
     </>
   );

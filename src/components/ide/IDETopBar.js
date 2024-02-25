@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
 
-export const IdeTopBar = ({ onRun, onSave }) => {
+export const IdeTopBar = ({ keyHashParam, onSave, onRun }) => {
   return (
     <div className="flex items-center fixed w-screen z-10 border-b bg-[#001529] text-white">
       <a href="">
@@ -15,7 +15,17 @@ export const IdeTopBar = ({ onRun, onSave }) => {
           className="bg-[#1880ff] font-semibold"
           type="primary"
           shape="round"
-          onClick={onSave}
+          onClick={() => {
+            // keyHashParam이 null이 아니면(= 응시자) 실행, null이면(= 감독관) 실행하지 않음
+            if (keyHashParam) {
+              onSave();
+              // 성공 메시지 표시
+              message.success({ content: "Save Succeed", duration: 1 });
+            } else {
+              // 경고 메시지 표시
+              message.warning({ content: "감독관은 저장 불가", duration: 1 });
+            }
+          }}
         >
           <p>SAVE</p>
         </Button>
@@ -23,7 +33,15 @@ export const IdeTopBar = ({ onRun, onSave }) => {
           className="bg-[#1880ff] font-semibold"
           type="primary"
           shape="round"
-          onClick={onRun}
+          onClick={() => {
+            // keyHashParam이 null이 아니면(= 응시자) 실행, null이면(= 감독관) 실행하지 않음
+            if (keyHashParam) {
+              onRun();
+            } else {
+              // 경고 메시지 표시
+              message.warning({ content: "감독관은 실행 불가", duration: 1 });
+            }
+          }}
         >
           <p>RUN</p>
         </Button>
