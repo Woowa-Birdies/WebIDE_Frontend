@@ -11,11 +11,10 @@ import TomorrowNightTheme from "monaco-themes/themes/Tomorrow-Night.json";
 import OceanicNextTheme from "monaco-themes/themes/Oceanic Next.json";
 
 import styles from "./CodeEditor.module.css";
-import { message } from "antd";
 import { IdeTopBar } from "./IDETopBar";
 import { ResultArea } from "./ResultArea";
 
-export const CodeEditor = ({ project, leftWidth }) => {
+export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
   const { keyHashParam } = useParams();
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
@@ -24,6 +23,7 @@ export const CodeEditor = ({ project, leftWidth }) => {
   );
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
+  const [saveInterval, setSaveInterval] = useState(undefined); // 코드 실시간 저장을 위한 인터벌 변수
 
   const editorOptions = {
     selectOnLineNumbers: true,
@@ -119,16 +119,50 @@ export const CodeEditor = ({ project, leftWidth }) => {
   }, [project.language]);
 
   const handleEditorChange = (value) => {
-    setCode(value);
+    // keyHashParam이 null이 아니면(= 응시자) 입력이 변경될 때마다 코드 저장
+    if (keyHashParam) {
+      setCode(value);
+      clearInterval(saveInterval);
+      setSaveInterval(setInterval(saveCode(), 1000 / 24)); // 24fps로 코드 저장
+    }
+  };
+
+  useEffect(() => {
+    // keyHashParam이 null이면(= 감독관) 입력이 변경될 때마다 코드 표출
+    if (!keyHashParam) {
+      // 코드 실시간 표출을 위한 인터벌 변수
+      const displayInterval = setInterval(onEditorChange(), 1000 / 24); // 24fps로 코드 표출
+
+      // 컴포넌트가 언마운트되면 displayInterval 제거
+      return () => clearInterval(displayInterval);
+    }
+  }, [project, keyHashParam]);
+
+  const saveCode = () => {
+    setCode(editorRef.current.getValue());
+    // console.log(code);
+
+    // setResult("코드 저장 진행 중 ...");
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${project.projectId}/save`,
+        {
+          language: project.language,
+          code: code,
+        }
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          console.log("Response Save Succeed : ", res.data);
+          // setResult("저장 되었습니다.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const runCode = () => {
-    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
-    if (!keyHashParam) {
-      message.warning({ content: "감독관은 실행 불가", duration: 1 }); // 경고 메시지 표시
-      return;
-    }
-
     setCode(editorRef.current.getValue());
     // console.log(code);
 
@@ -152,37 +186,6 @@ export const CodeEditor = ({ project, leftWidth }) => {
       });
   };
 
-  const saveCode = () => {
-    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
-    if (!keyHashParam) {
-      message.warning({ content: "감독관은 저장 불가", duration: 1 }); // 경고 메시지 표시
-      return;
-    }
-
-    setCode(editorRef.current.getValue());
-    // console.log(code);
-
-    // setResult("코드 저장 진행 중 ...");
-    axios
-      .patch(
-        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${project.projectId}/save`,
-        {
-          language: project.language,
-          code: code,
-        }
-      )
-      .then((res) => {
-        if (res.status == 200) {
-          console.log("Response Save Succeed : ", res.data);
-          // setResult("저장 되었습니다.");
-          message.success({ content: "Save Succeed", duration: 1 }); // 성공 메시지 표시
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   // const formatCode = (res) => {
   //   // JSON 파싱을 통해 객체로 변환
   //   const obj = JSON.parse(res);
@@ -194,10 +197,13 @@ export const CodeEditor = ({ project, leftWidth }) => {
   //   return result;
   // };
 
-  console.log(project.language ? project.language.toLowerCase() : "none");
   return (
     <>
-      <IdeTopBar onRun={runCode} onSave={saveCode} />
+      <IdeTopBar
+        keyHashParam={keyHashParam}
+        onSave={saveCode}
+        onRun={runCode}
+      />
       <div
         className={`${styles.codeEditorContainer} bg-[#002140]`}
         style={{
@@ -216,7 +222,7 @@ export const CodeEditor = ({ project, leftWidth }) => {
           value={project.code ? project.code : defaultAnnotation}
           onMount={handleEditorDidMount}
           onChange={handleEditorChange}
-          readOnly={!keyHashParam} // keyHashParam이 null이면(= 감독관이면) readOnly를 true로 설정하여 편집 비활성화
+          readOnly={!keyHashParam} // keyHashParam이 null이면(= 감독관) readOnly를 true로 설정하여 편집 비활성화
         />
         <ResultArea
           result={result}
