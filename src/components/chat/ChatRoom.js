@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import { Button, Flex,Input } from 'antd';
 
-function ChatRoom() {
+function ChatRoom(parameter) {
   const jwtToken = useSelector((state) => state.loginSlice.accessToken);
   const [client, setClient] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
+  const { TextArea } = Input;
+  
   useEffect(() => {
     const newClient = new Client({
       brokerURL: "ws://localhost:8080/ws", // 서버의 WebSocket 연결 주소
@@ -56,7 +58,6 @@ function ChatRoom() {
     showMessage[0].appendChild(createMessage);
   }
 
-  const { TextArea } = Input;
   return (
     <div>
         <div className="chatLog"></div>
