@@ -12,7 +12,7 @@ export const EnterChat = ({ setIsChatOpen }) => {
 
   return (
     <>
-      <Drawer title="Basic Drawer" onClose={onClose} open={showDrawer}>
+      <Drawer title="채팅방" onClose={onClose} open={showDrawer}>
         <ChatRoom />
       </Drawer>
     </>
