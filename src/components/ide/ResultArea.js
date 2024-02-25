@@ -14,7 +14,7 @@ export const ResultArea = ({ result, topHeigth, handleMouseDown }) => {
       ></div>
       <div className="p-3 whitespace-pre-line text-justify bg-[#002140] text-white">
         <p className="font-bold">실행 결과</p>
-        <p className="mt-2 text-sm">출력 결과</p>
+        <p className="mt-2">{result}</p>
       </div>
     </div>
   );

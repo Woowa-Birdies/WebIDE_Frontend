@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import jwtAxios from "../../util/jwtUtil";
 import { Button } from "antd";
 import { useCustomLogin } from "../../hooks/useCustomLogin";
 import { CreateProjectModal } from "../../components/ide/CreateProjectModal";
@@ -13,11 +14,12 @@ const initState = {
 };
 
 export const MyProjectPage = () => {
-  const { isLogin, moveToLoginReturn } = useCustomLogin();
   const [member, setMember] = useState(initState);
+  const [projectList, setProjectList] = useState([]);
   const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] =
     useState(false);
 
+  const { isLogin, moveToLoginReturn } = useCustomLogin();
   const loginInfo = useSelector((state) => state.loginSlice);
 
   useEffect(() => {
@@ -28,8 +30,30 @@ export const MyProjectPage = () => {
     return moveToLoginReturn();
   }
 
+  useEffect(() => {
+    fetchProjectList();
+  }, [member.memberId]);
+
+  const fetchProjectList = () => {
+    jwtAxios
+      .get(
+        `${process.env.REACT_APP_API_SERVER_HOST}/projects/${member.memberId}`
+      )
+      .then((res) => {
+        console.log("Response Project List : ", res.data);
+        setProjectList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const showCreateProjectModal = () => {
     setIsCreateProjectModalOpen(true);
+  };
+
+  const handleProjectCreated = () => {
+    fetchProjectList();
   };
 
   return (
@@ -49,12 +73,13 @@ export const MyProjectPage = () => {
             <CreateProjectModal
               setIsCreateProjectModalOpen={setIsCreateProjectModalOpen}
               member={member}
+              onCreateProject={handleProjectCreated}
             />
           ) : null}
         </div>
       </div>
       <div className="my-10">
-        <ProjectList member={member} />
+        <ProjectList projectList={projectList} member={member} />
       </div>
     </>
   );

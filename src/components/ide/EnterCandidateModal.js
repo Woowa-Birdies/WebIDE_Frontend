@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import jwtAxios from "../../util/jwtUtil";
 import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
 
 const layout = {
@@ -15,11 +14,8 @@ const layout = {
 export const EnterCandidateModal = ({
   setIsEnterCandidateModalOpen,
   projectId,
+  onCandidateEnter,
 }) => {
-  const [isPostSucceed, setIsPostSucceed] = useState(false);
-  const [isPatchSucceed, setIsPatchSucceed] = useState(false);
-  const [candidateId, setCandidateId] = useState("");
-
   const showModal = () => {
     setIsEnterCandidateModalOpen(true);
   };
@@ -48,43 +44,19 @@ export const EnterCandidateModal = ({
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/candidate/${projectId}`, {
         candidateName: value.candidate.name,
         birthDate: `${formatToLocalDateTime(value.candidate.birthDate)}`,
+        language: value.candidate.language,
       })
       .then((res) => {
         console.log(res);
         if (res.status == 201) {
           console.log("Request Success.............");
-          setCandidateId(res.data);
-          // setIsPostSucceed(true);
+          onCandidateEnter();
           setIsEnterCandidateModalOpen(false);
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-    axios
-      .patch(
-        `${process.env.REACT_APP_API_SERVER_HOST}/projects/${projectId}/languages`,
-        {
-          language: value.candidate.language,
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.status == 200) {
-          if (res.data == projectId) {
-            console.log("Request Success.............");
-            setIsPatchSucceed(true);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    if (isPostSucceed && isPatchSucceed) {
-      setIsEnterCandidateModalOpen(false);
-    }
   };
 
   function formatToLocalDateTime(dateTime) {

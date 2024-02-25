@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import jwtAxios from "../../util/jwtUtil";
-import { IdeTopBar } from "../../components/ide/IDETopBar";
 import { QuestionMenu } from "../../components/ide/QuestionMenu";
 import { CodeEditor } from "../../components/ide/CodeEditor";
 import { IdeBottomBar } from "../../components/ide/IDEBottomBar";
@@ -12,27 +10,9 @@ import { EnterCandidateModal } from "../../components/ide/EnterCandidateModal";
 export const IDEPage = () => {
   const { memberIdParam, projectIdParam, keyHashParam } = useParams();
   const { isLogin, moveToLoginReturn } = useCustomLogin();
-  const [projectInfo, setProjectInfo] = useState("");
+  const [project, setProject] = useState("");
   const [isEnterCandidateModalOpen, setIsEnterCandidateModalOpen] =
     useState(false);
-
-  const fetchProblem = async (setState) => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${memberIdParam}/${projectIdParam}`
-      )
-      .then((res) => {
-        setState(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    fetchProblem(setProjectInfo);
-    console.log(projectInfo);
-  }, []);
 
   if (!isLogin && !keyHashParam) {
     // 로그인되어 있지 않고 keyHashParam도 존재하지 않는 경우 로그인 창으로 이동
@@ -41,14 +21,42 @@ export const IDEPage = () => {
 
   useEffect(() => {
     if (!isLogin && keyHashParam) {
-      // 로그인되어 있지 않고 keyHashParam은 존재하는 경우 모달 오픈
-      setIsEnterCandidateModalOpen(true);
+      // 로그인되어 있지 않고 keyHashParam은 존재하는 경우
+      if (!project || project.candidateName === null) {
+        console.log(project && project.candidateName);
+        // 응시자 정보가 없으면 모달 Open
+        setIsEnterCandidateModalOpen(true);
+      } else {
+        // 응시자 정보가 있으면 모달 Close
+        setIsEnterCandidateModalOpen(false);
+      }
     }
-  }, [isLogin, keyHashParam]);
+  }, [isLogin, keyHashParam, project]);
+
+  const fetchProject = () => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${memberIdParam}/${projectIdParam}`
+      )
+      .then((res) => {
+        console.log("Response Project : ", res.data);
+        setProject(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchProject();
+  }, [memberIdParam, projectIdParam]);
+
+  const handleCandidateEntered = () => {
+    fetchProject();
+  };
 
   const [leftWidth, setLeftWidth] = useState(30); // 초기 왼쪽 너비 설정
   const [isResizing, setIsResizing] = useState(false);
-  const [sender, setSender] = useState("");
 
   useEffect(() => {
     const handleResize = (e) => {
@@ -83,21 +91,20 @@ export const IDEPage = () => {
 
   return (
     <div>
-      <IdeTopBar />
       <div>
         <QuestionMenu
-          projectInfo={projectInfo}
+          project={project}
           leftWidth={leftWidth}
           handleMouseDown={handleMouseDown}
         />
-        <CodeEditor leftWidth={leftWidth} />
+        <CodeEditor project={project} leftWidth={leftWidth} />
       </div>
-      <IdeBottomBar sender={sender} setSender={setSender} />
+      <IdeBottomBar project={project} />
       {isEnterCandidateModalOpen ? (
         <EnterCandidateModal
           setIsEnterCandidateModalOpen={setIsEnterCandidateModalOpen}
-          projectId={projectIdParam}
-          // keyHash={keyHashParam} // 선택된 프로젝트의 keyHash 전달
+          projectId={project.projectId}
+          onCandidateEnter={handleCandidateEntered}
         />
       ) : null}
     </div>

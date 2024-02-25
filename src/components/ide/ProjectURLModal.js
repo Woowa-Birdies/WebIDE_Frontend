@@ -25,7 +25,7 @@ export const ProjectURLModal = ({
   const handleCopyClick = () => {
     // URL을 클립보드에 복사하는 함수
     navigator.clipboard.writeText(projectUrl); // 프로젝트 URL을 클립보드에 복사
-    message.success("URL Copied to Clipboard"); // 성공 메시지 표시
+    message.success({ content: "URL Copied to Clipboard", duration: 1 }); // 성공 메시지 표시
   };
 
   return (
