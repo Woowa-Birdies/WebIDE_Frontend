@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Avatar, Button, Flex, Input, Popover } from "antd";
 import { UserOutlined, MailOutlined } from "@ant-design/icons";
 import { deleteMember, modifyMember } from "../../api/memberApi";
+import { CustomModal } from "./CustomModal";
+import { login } from "../../redux/reducers/loginSlice";
 
 const Container = styled.div`
   display: flex;
@@ -31,10 +33,12 @@ const initState = {
 
 export const ModifyComponent = () => {
   const [member, setMember] = useState(initState);
-
   const [loadings, setLoadings] = useState([]);
+  const [modal2Open, setModal2Open] = useState(false);
 
   const loginInfo = useSelector((state) => state.loginSlice);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setMember({ ...loginInfo });
@@ -57,14 +61,13 @@ export const ModifyComponent = () => {
 
   const handleChange = (e) => {
     member[e.target.name] = e.target.value;
-
     setMember({ ...member });
-    console.log(member.accessToken);
-    console.log(member);
   };
 
   const handleClickModify = () => {
-    modifyMember(member);
+    modifyMember(member).then((res) => {
+      dispatch(login(res));
+    });
   };
 
   const handleClickDelete = () => {
@@ -75,11 +78,6 @@ export const ModifyComponent = () => {
     <Container>
       <Card>
         <Flex gap="small" align="center" wrap="wrap" vertical="true">
-          {/* <Image
-                  style={{ borderRadius:'50%' }}
-                  width={100}
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              /> */}
           <Avatar size={64} src={member.profile}>
             {member.nickname[0]}
           </Avatar>
@@ -95,7 +93,6 @@ export const ModifyComponent = () => {
             />
           </InputWrapper>
           <InputWrapper>
-            {/* <Typography.Title level={5}>닉네임</Typography.Title> */}
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               name="nickname"
@@ -123,11 +120,17 @@ export const ModifyComponent = () => {
                 danger
                 type="primary"
                 onClick={() => {
-                  handleClickDelete();
+                  setModal2Open(true);
+                  // handleClickDelete();
                 }}
               >
                 탈퇴하기
               </Button>
+              <CustomModal
+                setModal2Open={setModal2Open}
+                modal2Open={modal2Open}
+                handle={handleClickDelete}
+              />
             </Popover>
           </InputWrapper>
         </Flex>

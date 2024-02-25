@@ -22,7 +22,14 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="login/kakao" element={<LoginLoadingPage />} />
             <Route path="login/google" element={<LoginLoadingPage2 />} />
-            <Route path="ide" element={<IDEPage />} />
+            <Route
+              path="ide/:memberIdParam/:projectIdParam"
+              element={<IDEPage />}
+            />
+            <Route
+              path="ide/:memberIdParam/:projectIdParam/:keyHashParam"
+              element={<IDEPage />}
+            />
           </Route>
 
           <Route path="/" element={<SideMenu />}>

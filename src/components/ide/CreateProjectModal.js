@@ -11,19 +11,24 @@ const layout = {
   },
 };
 
-export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
+export const CreateProjectModal = ({
+  setIsCreateProjectModalOpen,
+  member,
+  onCreateProject,
+}) => {
   const [problemList, setProblemList] = useState([]);
   const [projectId, setProjectId] = useState("");
 
   useEffect(() => {
     jwtAxios
       .get(`${process.env.REACT_APP_API_SERVER_HOST}/problems`)
-      .then((response) => {
-        // console.log(response.data);
-        setProblemList(response.data);
+      .then((res) => {
+        // console.log(res.data);
+        setProblemList(res.data);
+        onCreateProject();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -44,20 +49,19 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
 
     jwtAxios
       .post(`${process.env.REACT_APP_API_SERVER_HOST}/projects`, {
+        memberId: member.memberId,
         name: value.project.name,
         problemId: value.project.problemId,
-
-        memberId: member.memberId,
       })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 201) {
-          setProjectId(response.data);
+      .then((res) => {
+        console.log(res);
+        if (res.status == 201) {
+          setProjectId(res.data); // res.data: projectId
+          onCreateProject();
         }
-
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
 
     setIsCreateProjectModalOpen(false);
@@ -72,7 +76,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
     >
       <Form
         {...layout}
-        name="create-project"
+        name="createProject"
         onFinish={onSubmit}
         style={{
           marginRight: 40,
@@ -92,7 +96,7 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter Your Project Name" />
         </Form.Item>
         <Form.Item
           name={["project", "problemId"]}
@@ -110,7 +114,6 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
           <Select
             // showSearch
             placeholder="Select a Test from The List"
-            optionFilterProp="children"
             onChange={onChange}
             // onSearch={onSearch}
             // filterOption={filterOption}
@@ -120,7 +123,6 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
               value: problem.id,
               label: problem.title,
             }))}
-
           />
         </Form.Item>
         <Form.Item
@@ -131,11 +133,11 @@ export const CreateProjectModal = ({ setIsCreateProjectModalOpen, member }) => {
           }}
         >
           <div className="flex gap-10 mt-5">
-            <Button className="bg-[#1880ff]" type="primary" htmlType="submit">
-              Create
-            </Button>
             <Button type="default" onClick={closeModal}>
               Cancel
+            </Button>
+            <Button className="bg-[#1880ff]" type="primary" htmlType="submit">
+              Create
             </Button>
           </div>
         </Form.Item>
