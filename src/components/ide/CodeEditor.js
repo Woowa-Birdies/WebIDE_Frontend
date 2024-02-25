@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import Editor, { useMonaco } from "@monaco-editor/react";
@@ -10,15 +11,16 @@ import TomorrowNightTheme from "monaco-themes/themes/Tomorrow-Night.json";
 import OceanicNextTheme from "monaco-themes/themes/Oceanic Next.json";
 
 import styles from "./CodeEditor.module.css";
-import { Modal, Input, message } from "antd";
+import { message } from "antd";
 import { IdeTopBar } from "./IDETopBar";
 import { ResultArea } from "./ResultArea";
 
 export const CodeEditor = ({ project, leftWidth }) => {
+  const { keyHashParam } = useParams();
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
   const [defaultAnnotation, setDefaultAnnotation] = useState(
-    "응시자가 언어 설정을 하지 않았습니다.\n"
+    "응시자가 언어를 설정하지 않았습니다.\n"
   );
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
@@ -56,7 +58,6 @@ export const CodeEditor = ({ project, leftWidth }) => {
       if (!isResizing) return;
       const totalHeigth = window.innerHeight;
       const newTopHeigth = (e.clientY / totalHeigth) * 100;
-      // const newBottomHeigth = 100 - newTopHeigth;
       setTopHeigth(newTopHeigth);
     };
 
@@ -105,12 +106,6 @@ export const CodeEditor = ({ project, leftWidth }) => {
   }, [monaco]);
 
   useEffect(() => {
-    // // Editor 언어 설정
-    // monaco.editor.setModelLanguage(
-    //   editorRef.current.getModel(),
-    //   project.language
-    // );
-
     // 언어 문법에 따라 default 주석을 다르게 적용
     switch (project.language) {
       case "JAVA":
@@ -128,6 +123,12 @@ export const CodeEditor = ({ project, leftWidth }) => {
   };
 
   const runCode = () => {
+    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
+    if (!keyHashParam) {
+      message.warning({ content: "감독관은 실행 불가", duration: 1 }); // 경고 메시지 표시
+      return;
+    }
+
     setCode(editorRef.current.getValue());
     // console.log(code);
 
@@ -152,6 +153,12 @@ export const CodeEditor = ({ project, leftWidth }) => {
   };
 
   const saveCode = () => {
+    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
+    if (!keyHashParam) {
+      message.warning({ content: "감독관은 저장 불가", duration: 1 }); // 경고 메시지 표시
+      return;
+    }
+
     setCode(editorRef.current.getValue());
     // console.log(code);
 
@@ -187,13 +194,6 @@ export const CodeEditor = ({ project, leftWidth }) => {
   //   return result;
   // };
 
-  // const finalLanguage = project.language
-  //   ? project.language.toLowerCase()
-  //   : "javascript";
-  // console.log(finalLanguage);
-  // if (!project) {
-  //   return <></>;
-  // }
   console.log(project.language ? project.language.toLowerCase() : "none");
   return (
     <>
@@ -207,6 +207,7 @@ export const CodeEditor = ({ project, leftWidth }) => {
         <Editor
           height={`${topHeigth}%`}
           width="100%"
+          options={editorOptions}
           defaultLanguage={
             project.language ? project.language.toLowerCase() : ""
           }
@@ -214,8 +215,8 @@ export const CodeEditor = ({ project, leftWidth }) => {
           defaultValue={project.code ? project.code : defaultAnnotation}
           value={project.code ? project.code : defaultAnnotation}
           onMount={handleEditorDidMount}
-          options={editorOptions}
           onChange={handleEditorChange}
+          readOnly={!keyHashParam} // keyHashParam이 null이면(= 감독관이면) readOnly를 true로 설정하여 편집 비활성화
         />
         <ResultArea
           result={result}
