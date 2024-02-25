@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import Editor, { useMonaco } from "@monaco-editor/react";
@@ -10,12 +11,17 @@ import TomorrowNightTheme from "monaco-themes/themes/Tomorrow-Night.json";
 import OceanicNextTheme from "monaco-themes/themes/Oceanic Next.json";
 
 import styles from "./CodeEditor.module.css";
+import { message } from "antd";
 import { IdeTopBar } from "./IDETopBar";
 import { ResultArea } from "./ResultArea";
 
 export const CodeEditor = ({ project, leftWidth }) => {
+  const { keyHashParam } = useParams();
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
+  const [defaultAnnotation, setDefaultAnnotation] = useState(
+    "응시자가 언어를 설정하지 않았습니다.\n"
+  );
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
 
@@ -52,7 +58,6 @@ export const CodeEditor = ({ project, leftWidth }) => {
       if (!isResizing) return;
       const totalHeigth = window.innerHeight;
       const newTopHeigth = (e.clientY / totalHeigth) * 100;
-      // const newBottomHeigth = 100 - newTopHeigth;
       setTopHeigth(newTopHeigth);
     };
 
@@ -81,8 +86,9 @@ export const CodeEditor = ({ project, leftWidth }) => {
   useEffect(() => {
     if (!monaco) return; // 모나코 인스턴스가 null이면 early return
 
+    // Editor 초기화
     const initializeEditor = () => {
-      // 원하는 이름으로 테마를 define
+      // 원하는 이름으로 모나코 Editor 테마를 define
       monaco.editor.defineTheme("nightOwl", NightOwlTheme);
       monaco.editor.defineTheme("cobalt", CobaltTheme);
       monaco.editor.defineTheme("blackboard", BlackboardTheme);
@@ -90,7 +96,7 @@ export const CodeEditor = ({ project, leftWidth }) => {
       monaco.editor.defineTheme("tomorrowNight", TomorrowNightTheme);
       monaco.editor.defineTheme("oceanicNext", OceanicNextTheme);
 
-      // 모나코 에디터에 테마를 적용
+      // 모나코 Editor에 테마 적용
       monaco.editor.setTheme("nightOwl");
     };
 
@@ -99,11 +105,30 @@ export const CodeEditor = ({ project, leftWidth }) => {
     return () => clearTimeout(timeoutId); // cleanup 함수에서 timeout 제거
   }, [monaco]);
 
+  useEffect(() => {
+    // 언어 문법에 따라 default 주석을 다르게 적용
+    switch (project.language) {
+      case "JAVA":
+      case "CPP":
+        setDefaultAnnotation("// Please enter the code\n");
+        break;
+      case "PYTHON":
+        setDefaultAnnotation("# Please enter the code\n");
+        break;
+    }
+  }, [project.language]);
+
   const handleEditorChange = (value) => {
     setCode(value);
   };
 
   const runCode = () => {
+    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
+    if (!keyHashParam) {
+      message.warning({ content: "감독관은 실행 불가", duration: 1 }); // 경고 메시지 표시
+      return;
+    }
+
     setCode(editorRef.current.getValue());
     // console.log(code);
 
@@ -112,14 +137,14 @@ export const CodeEditor = ({ project, leftWidth }) => {
       .post(
         `${process.env.REACT_APP_API_SERVER_HOST}/ide/${project.projectId}/result`,
         {
-          language: "python",
+          language: project.language,
           code: code,
         }
       )
       .then((res) => {
         if (res.status == 200) {
           console.log("Response Run Code Result : ", res.data);
-          setResult(formatCode(res.data.data));
+          setResult(res.data.data);
         }
       })
       .catch((err) => {
@@ -127,35 +152,52 @@ export const CodeEditor = ({ project, leftWidth }) => {
       });
   };
 
-  const formatCode = (res) => {
-    // JSON 파싱을 통해 객체로 변환
-    const obj = JSON.parse(res);
-
-    let result = "";
-    for (const key in obj) {
-      result += obj[key] + "\n";
+  const saveCode = () => {
+    // keyHashParam이 null이면(= 감독관이면) 실행하지 않음
+    if (!keyHashParam) {
+      message.warning({ content: "감독관은 저장 불가", duration: 1 }); // 경고 메시지 표시
+      return;
     }
-    return result;
+
+    setCode(editorRef.current.getValue());
+    // console.log(code);
+
+    // setResult("코드 저장 진행 중 ...");
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_SERVER_HOST}/ide/${project.projectId}/save`,
+        {
+          language: project.language,
+          code: code,
+        }
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          console.log("Response Save Succeed : ", res.data);
+          // setResult("저장 되었습니다.");
+          message.success({ content: "Save Succeed", duration: 1 }); // 성공 메시지 표시
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  // 언어 문법에 따라 defaultValue의 주석을 다르게 적용
-  let defaultValue = "";
-  switch (project.language) {
-    case "java":
-    case "cpp":
-      defaultValue = "// Please enter the code";
-      break;
-    case "python":
-      defaultValue = "# Please enter the code";
-      break;
-  }
+  // const formatCode = (res) => {
+  //   // JSON 파싱을 통해 객체로 변환
+  //   const obj = JSON.parse(res);
 
+  //   let result = "";
+  //   for (const key in obj) {
+  //     result += obj[key] + "\n";
+  //   }
+  //   return result;
+  // };
+
+  console.log(project.language ? project.language.toLowerCase() : "none");
   return (
     <>
-      <IdeTopBar
-        onRun={runCode}
-        // onSave={saveCode}
-      />
+      <IdeTopBar onRun={runCode} onSave={saveCode} />
       <div
         className={`${styles.codeEditorContainer} bg-[#002140]`}
         style={{
@@ -165,12 +207,16 @@ export const CodeEditor = ({ project, leftWidth }) => {
         <Editor
           height={`${topHeigth}%`}
           width="100%"
-          defaultLanguage="python"
-          defaultValue={defaultValue}
-          value={code}
-          onMount={handleEditorDidMount}
           options={editorOptions}
+          defaultLanguage={
+            project.language ? project.language.toLowerCase() : ""
+          }
+          language={project.language ? project.language.toLowerCase() : ""}
+          defaultValue={project.code ? project.code : defaultAnnotation}
+          value={project.code ? project.code : defaultAnnotation}
+          onMount={handleEditorDidMount}
           onChange={handleEditorChange}
+          readOnly={!keyHashParam} // keyHashParam이 null이면(= 감독관이면) readOnly를 true로 설정하여 편집 비활성화
         />
         <ResultArea
           result={result}
