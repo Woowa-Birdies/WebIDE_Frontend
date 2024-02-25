@@ -15,7 +15,6 @@ import { IdeTopBar } from "./IDETopBar";
 import { ResultArea } from "./ResultArea";
 
 export const CodeEditor = ({ project, leftWidth }) => {
-  // const [anyLanguage, setAnyLanguage] = useState("python");
   const monaco = useMonaco(); // 사용할 모나코 인스턴스 생성
   const editorRef = useRef(null);
   const [defaultAnnotation, setDefaultAnnotation] = useState(
@@ -98,35 +97,31 @@ export const CodeEditor = ({ project, leftWidth }) => {
 
       // 모나코 Editor에 테마 적용
       monaco.editor.setTheme("nightOwl");
-
-      // Editor 언어 설정
-      monaco.editor.setModelLanguage(
-        editorRef.current.getModel(),
-        project.language
-      );
-
-      // 언어 문법에 따라 default 주석을 다르게 적용
-      switch (project.language) {
-        case "JAVA":
-        case "CPP":
-          setDefaultAnnotation("// Please enter the code\n");
-          break;
-        case "PYTHON":
-          setDefaultAnnotation("# Please enter the code\n");
-          break;
-      }
     };
 
     const timeoutId = setTimeout(initializeEditor, 100); // 100ms 후에 테마 설정
 
     return () => clearTimeout(timeoutId); // cleanup 함수에서 timeout 제거
-  }, [monaco, project.language]);
+  }, [monaco]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setAnyLanguage("javascript");
-  //   }, 3000);
-  // }, []);
+  useEffect(() => {
+    // // Editor 언어 설정
+    // monaco.editor.setModelLanguage(
+    //   editorRef.current.getModel(),
+    //   project.language
+    // );
+
+    // 언어 문법에 따라 default 주석을 다르게 적용
+    switch (project.language) {
+      case "JAVA":
+      case "CPP":
+        setDefaultAnnotation("// Please enter the code\n");
+        break;
+      case "PYTHON":
+        setDefaultAnnotation("# Please enter the code\n");
+        break;
+    }
+  }, [project.language]);
 
   const handleEditorChange = (value) => {
     setCode(value);
@@ -165,6 +160,7 @@ export const CodeEditor = ({ project, leftWidth }) => {
       .patch(
         `${process.env.REACT_APP_API_SERVER_HOST}/ide/${project.projectId}/save`,
         {
+          language: project.language,
           code: code,
         }
       )
@@ -191,13 +187,14 @@ export const CodeEditor = ({ project, leftWidth }) => {
   //   return result;
   // };
 
-  const finalLanguage = project.language
-    ? project.language.toLowerCase()
-    : "javascript";
-  console.log(finalLanguage);
-  if (!project) {
-    return <></>;
-  }
+  // const finalLanguage = project.language
+  //   ? project.language.toLowerCase()
+  //   : "javascript";
+  // console.log(finalLanguage);
+  // if (!project) {
+  //   return <></>;
+  // }
+  console.log(project.language ? project.language.toLowerCase() : "none");
   return (
     <>
       <IdeTopBar onRun={runCode} onSave={saveCode} />
@@ -210,16 +207,12 @@ export const CodeEditor = ({ project, leftWidth }) => {
         <Editor
           height={`${topHeigth}%`}
           width="100%"
-          // defaultLanguage={
-          //   // project.language ? project.language.toLowerCase() : "plainText"
-          //   finalLanguage
-          // }
-          language={
-            // project.language ? project.language.toLowerCase() : "plainText"
-            "javascript"
+          defaultLanguage={
+            project.language ? project.language.toLowerCase() : ""
           }
-          // defaultValue={project.code ? project.code : defaultAnnotation}
-          value={code}
+          language={project.language ? project.language.toLowerCase() : ""}
+          defaultValue={project.code ? project.code : defaultAnnotation}
+          value={project.code ? project.code : defaultAnnotation}
           onMount={handleEditorDidMount}
           options={editorOptions}
           onChange={handleEditorChange}
