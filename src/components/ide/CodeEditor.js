@@ -25,7 +25,6 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
   const [saveInterval, setSaveInterval] = useState(undefined); // 코드 실시간 저장을 위한 인터벌 변수
-
   const isChatOpen = useSelector((state) => state.chat.isChatOpen);
 
   const editorOptions = {
@@ -228,7 +227,7 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
           readOnly={!keyHashParam} // keyHashParam이 null이면(= 감독관) readOnly를 true로 설정하여 편집 비활성화
         />
         <ResultArea
-          result={result}
+          result={keyHashParam ? result : project.result}
           topHeigth={`${topHeigth}`}
           handleMouseDown={handleMouseDown}
         />
