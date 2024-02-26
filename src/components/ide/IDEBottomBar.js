@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-// import Stopwatch from "./Stopwatch";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "antd";
 import { WechatOutlined } from "@ant-design/icons";
 import { EnterChat } from "../chat/EnterChat";
+import { openChat } from "../../redux/reducers/chatSlice";
 
 export const IdeBottomBar = ({ project }) => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const { memberIdParam, projectIdParam } = useParams();
+  const isChatOpen = useSelector((state) => state.chat.isChatOpen);
+  const dispatch = useDispatch();
 
   const showChat = () => {
-    setIsChatOpen(true);
+    dispatch(openChat());
   };
 
   function formatDate(dateTime) {
@@ -54,13 +54,7 @@ export const IdeBottomBar = ({ project }) => {
             <WechatOutlined />
             CHAT
           </Button>
-          {isChatOpen ? (
-            <EnterChat
-              setIsChatOpen={setIsChatOpen}
-              memberIdParam={memberIdParam}
-              projectIdParam={projectIdParam}
-            />
-          ) : null}
+          {isChatOpen ? <EnterChat /> : null}
         </div>
       </div>
     </>

@@ -1,15 +1,19 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openChat, closeChat } from "../../redux/reducers/chatSlice";
 import { Drawer } from "antd";
 import ChatRoom from "./ChatRoom";
-import { useParams } from "react-router-dom";
 
-export const EnterChat = ({ setIsChatOpen }) => {
+export const EnterChat = () => {
+  const dispatch = useDispatch();
+
   const parameters = useParams();
   const showDrawer = () => {
-    setIsChatOpen(true);
+    dispatch(openChat());
   };
   const onClose = () => {
-    setIsChatOpen(false);
+    dispatch(closeChat());
   };
 
   return (
