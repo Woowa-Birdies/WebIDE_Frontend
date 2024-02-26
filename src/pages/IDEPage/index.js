@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { QuestionMenu } from "../../components/ide/QuestionMenu";
 import { CodeEditor } from "../../components/ide/CodeEditor";
@@ -13,6 +14,8 @@ export const IDEPage = () => {
   const [project, setProject] = useState("");
   const [isEnterCandidateModalOpen, setIsEnterCandidateModalOpen] =
     useState(false);
+
+  const isChatOpen = useSelector((state) => state.chat.isChatOpen);
 
   if (!isLogin && !keyHashParam) {
     // 로그인되어 있지 않고 keyHashParam도 존재하지 않는 경우 로그인 창으로 이동
@@ -103,7 +106,7 @@ export const IDEPage = () => {
           onEditorChange={handleProjectChange}
         />
       </div>
-      <IdeBottomBar project={project} onCandidateEnter={handleProjectChange} />
+      <IdeBottomBar project={project} isChatOpen={isChatOpen} />
       {isEnterCandidateModalOpen ? (
         <EnterCandidateModal
           setIsEnterCandidateModalOpen={setIsEnterCandidateModalOpen}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 import Editor, { useMonaco } from "@monaco-editor/react";
 import NightOwlTheme from "monaco-themes/themes/Night Owl.json";
@@ -24,6 +25,8 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
   const [saveInterval, setSaveInterval] = useState(undefined); // 코드 실시간 저장을 위한 인터벌 변수
+
+  const isChatOpen = useSelector((state) => state.chat.isChatOpen);
 
   const editorOptions = {
     selectOnLineNumbers: true,
@@ -129,14 +132,14 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
 
   useEffect(() => {
     // keyHashParam이 null이면(= 감독관) 입력이 변경될 때마다 코드 표출
-    if (!keyHashParam) {
+    if (!keyHashParam && !isChatOpen) {
       // 코드 실시간 표출을 위한 인터벌 변수
       const displayInterval = setInterval(onEditorChange(), 1000 / 24); // 24fps로 코드 표출
 
       // 컴포넌트가 언마운트되면 displayInterval 제거
       return () => clearInterval(displayInterval);
     }
-  }, [project, keyHashParam]);
+  }, [project, keyHashParam, isChatOpen]);
 
   const saveCode = () => {
     setCode(editorRef.current.getValue());
