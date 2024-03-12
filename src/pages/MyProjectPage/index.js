@@ -52,7 +52,7 @@ export const MyProjectPage = () => {
     setIsCreateProjectModalOpen(true);
   };
 
-  const handleProjectCreated = () => {
+  const handleProjectChanged = () => {
     fetchProjectList();
   };
 
@@ -73,13 +73,17 @@ export const MyProjectPage = () => {
             <CreateProjectModal
               setIsCreateProjectModalOpen={setIsCreateProjectModalOpen}
               member={member}
-              onCreateProject={handleProjectCreated}
+              onCreateProject={handleProjectChanged}
             />
           ) : null}
         </div>
       </div>
       <div className="my-10">
-        <ProjectList projectList={projectList} member={member} />
+        <ProjectList
+          projectList={projectList}
+          member={member}
+          onDeleteProject={handleProjectChanged}
+        />
       </div>
     </>
   );

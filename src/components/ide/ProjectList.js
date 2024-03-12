@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Table } from "antd";
-import { ShareAltOutlined, FormOutlined } from "@ant-design/icons";
+import { ShareAltOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ProjectURLModal } from "./ProjectURLModal";
+import { DeleteProjectModal } from "./DeleteProjectModal";
 
-export const ProjectList = ({ projectList, member }) => {
+export const ProjectList = ({ projectList, member, onDeleteProject }) => {
   const [selectedProjectId, setSelectedProjectId] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
   const [selectedProjectKeyHash, setSelectedProjectKeyHash] = useState(""); // 선택된 프로젝트의 keyHash 상태 추가
   const [isProjectURLModalOpen, setIsProjectURLModalOpen] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] =
+    useState(false);
 
-  const showModal = (projectId, projectKeyHash) => {
+  const showProjectURLModal = (projectId, projectKeyHash) => {
     setSelectedProjectId(projectId);
     setSelectedProjectKeyHash(projectKeyHash);
     setIsProjectURLModalOpen(true);
+  };
+
+  const showDeleteProjectModal = (projectId) => {
+    setSelectedProjectId(projectId);
+    setIsDeleteProjectModalOpen(true);
   };
 
   const columns = [
@@ -62,16 +70,21 @@ export const ProjectList = ({ projectList, member }) => {
       render: (text, record) => (
         <Button
           icon={<ShareAltOutlined />}
-          onClick={() => showModal(record.projectId, record.keyHash)} // showModal 함수에 프로젝트의 projectId, keyHash 전달
+          onClick={() => showProjectURLModal(record.projectId, record.keyHash)} // showProjectURLModal 함수에 프로젝트의 projectId, keyHash 전달
         />
       ),
     },
     {
-      title: "Edit",
-      dataIndex: "edit",
-      key: "edit",
+      title: "Delete",
+      dataIndex: "delete",
+      key: "delete",
       align: "center",
-      render: (text, record) => <Button icon={<FormOutlined />} href="" />,
+      render: (text, record) => (
+        <Button
+          icon={<DeleteOutlined />}
+          onClick={() => showDeleteProjectModal(record.projectId)}
+        />
+      ),
     },
   ];
 
@@ -107,9 +120,16 @@ export const ProjectList = ({ projectList, member }) => {
       {isProjectURLModalOpen ? (
         <ProjectURLModal
           setIsProjectURLModalOpen={setIsProjectURLModalOpen}
-          selectedProjectId={selectedProjectId}
+          selectedProjectId={selectedProjectId} // 선택된 프로젝트의 id 전달
           selectedProjectKeyHash={selectedProjectKeyHash} // 선택된 프로젝트의 keyHash 전달
           member={member}
+        />
+      ) : null}
+      {isDeleteProjectModalOpen ? (
+        <DeleteProjectModal
+          setIsDeleteProjectModalOpen={setIsDeleteProjectModalOpen}
+          selectedProjectId={selectedProjectId} // 선택된 프로젝트의 id 전달
+          onDeleteProject={onDeleteProject}
         />
       ) : null}
     </>
