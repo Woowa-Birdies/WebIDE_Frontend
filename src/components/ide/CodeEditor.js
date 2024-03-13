@@ -24,7 +24,6 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
   );
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
-  const [saveInterval, setSaveInterval] = useState(undefined); // 코드 실시간 저장을 위한 인터벌 변수
   const isChatOpen = useSelector((state) => state.chat.isChatOpen);
 
   const editorOptions = {
@@ -121,19 +120,20 @@ export const CodeEditor = ({ project, leftWidth, onEditorChange }) => {
   }, [project.language]);
 
   const handleEditorChange = (value) => {
-    // keyHashParam이 null이 아니면(= 응시자) 입력이 변경될 때마다 코드 저장
+    // keyHashParam이 null이 아니면(= 응시자라면)
     if (keyHashParam) {
+      // 코드 에디터에 변경이 있을 때마다 코드 저장
       setCode(value);
-      clearInterval(saveInterval);
-      setSaveInterval(setInterval(saveCode(), 1000 / 24)); // 24fps로 코드 저장
+      saveCode();
     }
   };
 
   useEffect(() => {
-    // keyHashParam이 null이면(= 감독관) 입력이 변경될 때마다 코드 표출
+    // keyHashParam이 null이면(= 감독관이라면)
     if (!keyHashParam && !isChatOpen) {
       // 코드 실시간 표출을 위한 인터벌 변수
-      const displayInterval = setInterval(onEditorChange(), 1000 / 24); // 24fps로 코드 표출
+      // 1초마다 onEditorChange 함수 호출 (1초마다 감독관 코드 에디터 화면에 코드 표출)
+      const displayInterval = setInterval(onEditorChange, 1000);
 
       // 컴포넌트가 언마운트되면 displayInterval 제거
       return () => clearInterval(displayInterval);

@@ -18,24 +18,6 @@ export const IdeTopBar = ({ keyHashParam, onSave, onRun }) => {
           onClick={() => {
             // keyHashParam이 null이 아니면(= 응시자) 실행, null이면(= 감독관) 실행하지 않음
             if (keyHashParam) {
-              onSave();
-              // 성공 메시지 표시
-              message.success({ content: "Save Succeed", duration: 1 });
-            } else {
-              // 경고 메시지 표시
-              message.warning({ content: "감독관은 저장 불가", duration: 1 });
-            }
-          }}
-        >
-          <p>SAVE</p>
-        </Button>
-        <Button
-          className="bg-[#1880ff] font-semibold"
-          type="primary"
-          shape="round"
-          onClick={() => {
-            // keyHashParam이 null이 아니면(= 응시자) 실행, null이면(= 감독관) 실행하지 않음
-            if (keyHashParam) {
               onRun();
             } else {
               // 경고 메시지 표시
@@ -44,6 +26,30 @@ export const IdeTopBar = ({ keyHashParam, onSave, onRun }) => {
           }}
         >
           <p>RUN</p>
+        </Button>
+        <Button
+          className="bg-[#1880ff] font-semibold"
+          type="primary"
+          shape="round"
+          onClick={() => {
+            // keyHashParam이 null이 아니면(= 응시자) 실행, null이면(= 감독관) 실행하지 않음
+            if (keyHashParam) {
+              onSave();
+              // 성공 메시지 표시
+              message.success({
+                content: "Submitted Successfully",
+                duration: 1.5,
+              });
+            } else {
+              // 경고 메시지 표시
+              message.warning({
+                content: "감독관은 제출 불가",
+                duration: 1,
+              });
+            }
+          }}
+        >
+          <p>SUBMIT</p>
         </Button>
       </div>
     </div>
