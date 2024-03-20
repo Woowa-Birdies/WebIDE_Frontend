@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { openChat, closeChat } from "../../redux/reducers/chatSlice";
 import { Drawer } from "antd";
 import ChatRoom from "./ChatRoom";
-
 export const EnterChat = () => {
   const dispatch = useDispatch();
 
