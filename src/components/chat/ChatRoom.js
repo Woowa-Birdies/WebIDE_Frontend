@@ -14,7 +14,8 @@ function ChatRoom({ parameters }) {
 
   useEffect(() => {
     const newClient = new Client({
-      brokerURL: "ws://localhost:8080/ws", // 서버의 WebSocket 연결 주소
+      // brokerURL: "ws://localhost:8080/ws", // 서버의 WebSocket 연결 주소
+      brokerURL: "ec2-3-37-161-133.ap-northeast-2.compute.amazonaws.com", // 서버의 WebSocket 연결 주소
       connectHeaders: {
         Authorization: `Bearer ${jwtToken}`, // JWT 토큰 인증 헤더
       },
